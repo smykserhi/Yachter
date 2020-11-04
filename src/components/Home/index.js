@@ -1,12 +1,10 @@
-import React from 'react';
- 
+import React from 'react'; 
 import { withAuthorization } from '../Session';
+import Cards from "../Cards"
  
 const HomePage = () => (
-  <div>
-    <h1>Home Page</h1>
-    <p>The Home Page is accessible by every signed in user.</p>
-  </div>
+  <h1>Home page</h1>
+  //<Cards/>
 );
  //coment
 const condition = authUser => authUser != null;

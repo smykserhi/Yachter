@@ -18,6 +18,11 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
+    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+    padding : "30px",
+    borderRadius: "15px",
+    
+    
   },
   avatar: {
     margin: theme.spacing(1),
@@ -38,7 +43,7 @@ export default function SignInTemplate(props) {
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
-      <div className={classes.paper}>
+      <div className={classes.paper} >
         <Avatar className={classes.avatar}>
           <LockOutlinedIcon />
         </Avatar>

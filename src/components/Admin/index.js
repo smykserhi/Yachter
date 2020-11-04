@@ -1,7 +1,8 @@
-import React, { Component } from 'react'; 
+import React, { Component  } from 'react'; 
 
 import { withAuthorization } from '../Session';
- 
+import UserList from "./data"
+
 class AdminPage extends Component {
   constructor(props) {
     super(props);
@@ -9,76 +10,58 @@ class AdminPage extends Component {
     this.state = {
       loading: false,
       users: [],
-      userData: {}
+      userData: {},
+      logintest: {},
+      image: {}
     };
   }
  
   componentDidMount() {
-    this.setState({ loading: true });
-    //console.log(this.props.firebase.user(this.props.id))
-    // this.props.firebase.logintest().on('value', snapshot => {
-    //  console.log("snapshot.val();" , snapshot.val())
-    // })
+    this.setState({ loading: true });    
     this.props.firebase.users().on('value', snapshot => {
-      const usersObject = snapshot.val();
-      //console.log("users Object",usersObject)
+      const usersObject = snapshot.val();      
       const usersList = Object.keys(usersObject).map(key => ({
         ...usersObject[key],
         uid: key,
       }));
       this.setState({
         users: usersList,
-        loading: false,
+        loading: false,        
       });
     });
     this.props.firebase.user(this.props.id).on('value', snapshot => {
       const usersObject = snapshot.val();
-      //sconsole.log("user Object",usersObject)
-      // const usersList = Object.keys(usersObject).map(key => ({
-      //   ...usersObject[key],
-      //   uid: key,
-      // }));
+      //console.log("user Object",usersObject)  
       this.setState({
-        userData: usersObject,
-        
+        userData: usersObject,        
       });
-    });
+    });    
   }
+  
   componentWillUnmount() {
     this.props.firebase.users().off();
+    this.props.firebase.user().off()
+    //this.props.firebase.logintest().off()
   }
  
   render() {
     
-    const { users, loading } = this.state;
-    console.log("userData", this.state.userData)
+    const { users, loading } = this.state;    
     return (
       <div>
         <h1>Admin {this.props.id}</h1>
         {loading && <div>Loading ...</div>} 
-        <UserList users={users} />
+        <UserList users={users} props={this.props} />
       </div>
     );
   }
 }
-const UserList = ({ users }) => (
-  <ul>
-    {users.map(user => (
-      <li key={user.uid}>
-        <span>
-          <strong>ID:</strong> {user.uid}
-        </span>
-        <span>
-          <strong>E-Mail:</strong> {user.email}
-        </span>
-        <span>
-          <strong>Username:</strong> {user.username}
-        </span>
-      </li>
-    ))}
-  </ul>
-);
- 
+
+
+
+
+
+//        } 
 // export default withFirebase(AdminPage);
  
 // const condition = authUser =>

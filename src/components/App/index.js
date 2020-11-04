@@ -11,12 +11,28 @@ import AccountPage from '../Account';
 import AdminPage from '../Admin'; 
 import * as ROUTES from '../../constants/routes';
 import { withAuthentication } from '../Session';
-import { cyan, lightGreen } from '@material-ui/core/colors';
+import { blue, cyan } from '@material-ui/core/colors';
+import Footer from "../Footer"
+import {Box} from "@material-ui/core"
+import { makeStyles } from '@material-ui/core/styles';
+import {AppConsumer} from "../AppContext"
+import TripInfo from "../TripInfo"
  
+const useStyles = makeStyles({
+  
+  mainGrid: {
+    display : "flex",
+    flexDirection : "column",
+    width: '100vw',
+    minHeight: '100vh',
+    spacing: 0,
+    justify: 'space-around'
+  }
+});
 const myTheme = createMuiTheme({
   palette: {
     primary : {
-      main: lightGreen[500],
+      main: blue[200],
       
     },
     secondary: {
@@ -27,22 +43,31 @@ const myTheme = createMuiTheme({
 });
 //console.log(myTheme) 
 
-const App = () => (
-  <Router>
-    <ThemeProvider theme={myTheme}>
-      <Navigation />      
-      <Route exact path={ROUTES.LANDING} component={LandingPage} />
-      <Route path={ROUTES.SIGN_UP} component={SignUpPage} />
-      <Route path={ROUTES.SIGN_IN} component={SignInPage} />
-      <Route
-        path={ROUTES.PASSWORD_FORGET}
-        component={PasswordForgetPage}
-      />
-      <Route path={ROUTES.HOME} component={HomePage} />
-      <Route path={ROUTES.ACCOUNT} component={AccountPage} />
-      <Route path={ROUTES.ADMIN} component={AdminPage} />
-    </ThemeProvider>
-  </Router>
-);
+const App = () => {
+  const classes = useStyles();
+  return(
+    <Router>
+      <ThemeProvider theme={myTheme}>
+        <AppConsumer>
+          {consumer =>(
+            <Box className = {classes.mainGrid}>
+              <Navigation />      
+              <Route exact path={ROUTES.MAIN} component={LandingPage} />
+              <Route path={ROUTES.SIGN_UP} component={SignUpPage} />
+              <Route path={ROUTES.SIGN_IN} render={()=>(<SignInPage />)} />
+              <Route path={ROUTES.PASSWORD_FORGET} component={PasswordForgetPage} />
+              <Route path={ROUTES.HOME} component={HomePage} />
+              <Route path={ROUTES.ACCOUNT} component={AccountPage} />
+              <Route path={ROUTES.ADMIN} component={AdminPage} />
+              <Route path={ROUTES.TRIP_INFO} component={TripInfo}/>
+              <Footer bottom/>
+            </Box>
+          )}
+        </AppConsumer>
+        
+      </ThemeProvider>
+    </Router>
+  );
+}
  
 export default withAuthentication(App);

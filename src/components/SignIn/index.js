@@ -4,12 +4,20 @@ import { compose } from 'recompose';
 import { withFirebase } from '../Firebase';
 import * as ROUTES from '../../constants/routes';
 import SignInTemplate from "./Template"
+import {AppConsumer} from "../AppContext"
 //import Alert from "../Alert"
 
 
-
-const SignInPage = () => (  
-    <SignInForm />    
+let setAutorization 
+const SignInPage = () => ( 
+  <AppConsumer>
+    {context =>{
+      setAutorization = context.actions.setAutorised;
+      return(
+      <SignInForm  />  
+    )}}
+  </AppConsumer> 
+      
 );
  
 const INITIAL_STATE = {
@@ -33,7 +41,8 @@ class SignInFormBase extends Component {
       .then(() => {
         console.log("singIn succses")
         this.setState({ ...INITIAL_STATE });
-        this.props.history.push(ROUTES.HOME);
+        setAutorization(true)//set AppContext autorisation to true
+        this.props.history.push(ROUTES.MAIN);
       })
       .catch(error => {
         this.setState({ error });
@@ -50,8 +59,9 @@ class SignInFormBase extends Component {
     const { email, password, error } = this.state;
  
     const isInvalid = password === '' || email === '';
-    
-     return (     
+        
+     return ( 
+       
       <div>
         <SignInTemplate 
             emailValue = {email}

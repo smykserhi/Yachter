@@ -9,11 +9,14 @@ import SignUpTemplate from "./Temolate"
 const SignUpPage = () => (  
     <SignUpForm />      
 );
+
 const INITIAL_STATE = {
   username: '',
   email: '',
   passwordOne: '',
   passwordTwo: '',
+  experiance: 0,
+  captain : false,
   error: null,
 }; 
 
@@ -24,7 +27,7 @@ class SignUpFormBase extends Component {
   }
  
   onSubmit = event => {
-    const { username, email, passwordOne } = this.state;
+    const {experiance, captain, username, email, passwordOne } = this.state;
  
     this.props.firebase
       .doCreateUserWithEmailAndPassword(email, passwordOne)
@@ -35,13 +38,15 @@ class SignUpFormBase extends Component {
           .set({
             username,
             email,
-            data: "test data"
+            role: "user",
+            experiance,
+            captain
           });
           })
       .then(authUser => {
         console.log("SingUp secess")
         this.setState({ ...INITIAL_STATE });
-        this.props.history.push(ROUTES.HOME);
+        this.props.history.push(ROUTES.MAIN);
       })
       .catch(error => {
         this.setState({ error });
@@ -51,7 +56,8 @@ class SignUpFormBase extends Component {
   }
  
   onChange = event => {
-    this.setState({ [event.target.name]: event.target.value });
+    if(event.target.name === "captain") this.setState({[event.target.name]: event.target.checked})
+    else this.setState({ [event.target.name]: event.target.value });
   };
  
   render() {
@@ -76,6 +82,9 @@ class SignUpFormBase extends Component {
             onChange={this.onChange}
             onSubmit={this.onSubmit}
             isInvalid={isInvalid}
+            experiance = {this.state.experiance}
+            captain = {this.state.captain}
+
           />
         {error && <p>{error.message}</p>}
         </div>      
