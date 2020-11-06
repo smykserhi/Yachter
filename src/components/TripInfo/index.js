@@ -164,10 +164,10 @@ class LandingPage extends Component {
                 spacing={4}>
                 <GridItem key={1} LogoIcon = {"DirectionsBoatIcon"} text={card.shipName}/>
                 <GridItem key={2} LogoIcon = {"DateRangeIcon"} text={ card.startDate}/>
-                <GridItem key={3} LogoIcon = {"PersonPinCircleIcon"} text={card.pickUp}/>
+                <GridItem key={3} LogoIcon = {"PersonPinCircleIcon"} text={card.portDeparture}/>
                 <GridItem key={4} LogoIcon = {"MonetizationOnIcon"} text={card.fee}/>
-                <GridItem key={5} LogoIcon = {"ViewWeekIcon"} text={`${card.daysAmount} days`}/>
-                <GridItem key={6} LogoIcon = {"PinDropIcon"} text={card.dropOf}/>               
+                <GridItem key={5} LogoIcon = {"ViewWeekIcon"} text={`${card.endDate} days`}/>
+                <GridItem key={6} LogoIcon = {"PinDropIcon"} text={card.portOfArival}/>               
              </Grid>
              </BoxInGrid>
         </MyBox>

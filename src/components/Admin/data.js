@@ -33,6 +33,7 @@ const UserList = ({ users, props }) => {
                 .getDownloadURL()
                 .then(url=>{
                     urlArr[el]=url  
+                    console.log(urlArr)
                     setUrls(urlArr)                             
                 })
                 
@@ -72,14 +73,14 @@ return(
                   userId: user.uid, 
                   title: "In The Trece Of Columbus", 
                   startDate : "1st october 2020",
-                  daysAmount: 5,
+                  endDate: 5,
                   imgUrl: "https://firebasestorage.googleapis.com/v0/b/test-7f1dd.appspot.com/o/images%2Fyacht-jobs-blog.jpg?alt=media&token=d493f346-3491-492f-9ca0-cfd4d0327b85",
-                  disShort: 'Eventually, I also got my Captain’s License and Master of Yachts 200T certification with a sailing endorsement. So this is an industry I know very well!',
+                  tripDesacription: 'Eventually, I also got my Captain’s License and Master of Yachts 200T certification with a sailing endorsement. So this is an industry I know very well!',
                   disLong: "Eventually, I also got my Captain’s License and Master of Yachts 200T certification with a sailing endorsement. So this is an industry I know very well!Eventually, I also got my Captain’s License and Master of Yachts 200T certification with a sailing endorsement. So this is an industry I know very well!Eventually, I also got my Captain’s License and Master of Yachts 200T certification with a sailing endorsement. So this is an industry I know very well!Eventually, I also got my Captain’s License and Master of Yachts 200T certification with a sailing endorsement. So this is an industry I know very well!",
                   shipName: "Gambrinus",
-                  pickUp: "London",
+                  portDeparture: "London",
                   fee: "Free",
-                  dropOf : "San Frans",
+                  portOfArival : "San Frans",
                   daysDis: [{dayHead: "day header", 
                             dayDis: "Day1 discription", 
                             imgUrl: "https://firebasestorage.googleapis.com/v0/b/test-7f1dd.appspot.com/o/images%2Fyacht-jobs-blog.jpg?alt=media&token=d493f346-3491-492f-9ca0-cfd4d0327b85"},
@@ -113,14 +114,14 @@ return(
                   cardPostId: res,
                   title: "In The Trece Of Columbus", 
                   startDate : "1st october 2020",
-                  daysAmount: 5,
+                  endDate: 5,
                   imgUrl: "https://firebasestorage.googleapis.com/v0/b/test-7f1dd.appspot.com/o/images%2Fyacht-jobs-blog.jpg?alt=media&token=d493f346-3491-492f-9ca0-cfd4d0327b85",
-                  disShort: 'Eventually, I also got my Captain’s License and Master of Yachts 200T certification with a sailing endorsement. So this is an industry I know very well!',
+                  tripDesacription: 'Eventually, I also got my Captain’s License and Master of Yachts 200T certification with a sailing endorsement. So this is an industry I know very well!',
                   disLong: "Eventually, I also got my Captain’s License and Master of Yachts 200T certification with a sailing endorsement. So this is an industry I know very well!Eventually, I also got my Captain’s License and Master of Yachts 200T certification with a sailing endorsement. So this is an industry I know very well!Eventually, I also got my Captain’s License and Master of Yachts 200T certification with a sailing endorsement. So this is an industry I know very well!Eventually, I also got my Captain’s License and Master of Yachts 200T certification with a sailing endorsement. So this is an industry I know very well!",
                   shipName: "Gambrinus",
-                  pickUp: "London",
+                  portDeparture: "London",
                   fee: "Free",
-                  dropOf : "San Frans",
+                  portOfArival : "San Frans",
                   daysDis: [{dayHead: "day header", 
                             dayDis: "Day1 discription", 
                             imgUrl: "https://firebasestorage.googleapis.com/v0/b/test-7f1dd.appspot.com/o/images%2Fyacht-jobs-blog.jpg?alt=media&token=d493f346-3491-492f-9ca0-cfd4d0327b85"},

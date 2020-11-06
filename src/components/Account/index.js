@@ -99,9 +99,10 @@ handleOnClickAddTrip = () =>{
   this.setState({modalOpen: true, modalContent: "AddTrip"})
 }
 //on close modal window
-handleCloseModal =()=>{
+handleCloseModal =(func=null)=>{
   console.log("close modal")
   this.setState({modalOpen: false,openModalEditRequest: false, requestParam: null})
+  if(func !== null) func()
 }
 //handle onSubmit edit profile
 handleSubmitModal=(data, element)=>{
@@ -178,6 +179,14 @@ handleResponseSend=(message)=>{
   //const sender = this.state.user.username  
   this.setState({modalOpen: false, modalContent: null, requestParam: null} )
   this.props.firebase.addMessageToUser(sendTo, {...this.state.requestParam, message})
+}
+saveNewTrip = (res) =>{
+  console.log("Response in modal",{...res, userId: this.state.userId})
+  const newResponse = {...res, userId: this.state.userId}
+  const cardPostId = this.props.firebase.addCard(newResponse)
+  this.props.firebase.addCardToUser(this.state.userId, {...newResponse, cardPostId  })
+  this.handleCloseModal()
+
 }
 
   render(){
@@ -321,7 +330,7 @@ handleResponseSend=(message)=>{
                   
                 </Grid>
               }
-              <ModalForm sendResponse={this.handleResponseSend} handleDeleteCard={this.handleDeleteConfirmed} yesDelete={this.yesDeleteHandler} onSubmit={this.handleSubmitModal} user={user} open={this.state.modalOpen} handleCloseModal={this.handleCloseModal} modalContent={this.state.modalContent}/>
+              <ModalForm saveNewTrip={this.saveNewTrip} firebase={this.props.firebase} sendResponse={this.handleResponseSend} handleDeleteCard={this.handleDeleteConfirmed} yesDelete={this.yesDeleteHandler} onSubmit={this.handleSubmitModal} user={user} open={this.state.modalOpen} handleCloseModal={this.handleCloseModal} modalContent={this.state.modalContent}/>
               <ModalPopUp open={this.state.openModalEditRequest} onClose={this.handleCloseModal} onSubmit={this.handleSaveEditedRequest}/>    
             </div>     
           

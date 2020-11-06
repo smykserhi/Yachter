@@ -6,9 +6,10 @@ import PasswordChangeForm from '../PasswordChange';
 import EditProfile from "./EditProfile"
 import DeleteConfirmation from "./DeletConfirmation"
 import SendResponseToUser from "./SendResponseToUser"
+import AddTripTemplate from "./AddTripTemplate"
 
 
-
+//let myRef = React.createRef();
 function getModalStyle() {
   const top = 50 
   const left = 50 
@@ -23,7 +24,8 @@ function getModalStyle() {
 const useStyles = makeStyles((theme) => ({
   paper: {
     position: 'absolute',
-    
+    maxHeight : "100vh",       
+    overflow:'scroll',//make modal scrolable     
     backgroundColor: theme.palette.background.paper,
     border: '2px solid #000',
     boxShadow: theme.shadows[5],
@@ -34,6 +36,7 @@ const useStyles = makeStyles((theme) => ({
       [theme.breakpoints.up('md')]: {
         width: "40vw",
       },
+  
   },
 }));
 
@@ -50,30 +53,38 @@ const onSubmitEdit=(data)=>{
   //console.log(data)
   props.onSubmit(data, "editProfile")
 }
+const deleteTempImage=(func) =>{
+  //console.log("Response in modal",res)
+  //console.log("my ref", func())
+  
+}
+
 
   const body = (
     <div style={modalStyle} className={classes.paper}>
       {props.modalContent === "ChangePassword"? <PasswordChangeForm/>: ""}
       {props.modalContent === "ResetPassword"? <PasswordForgetForm/>: ""}
       {props.modalContent === "EditProfile"? <EditProfile onSubmit={onSubmitEdit} />: ""}
-      {props.modalContent === "AddTrip"? <h4>AddTrip form here</h4>: ""}
+      {props.modalContent === "AddTrip"? <AddTripTemplate deleteTempImage={(func)=>props.handleCloseModal(func)} saveResponse={props.saveNewTrip} firebase={props.firebase}/>: ""}
       {props.modalContent === "Delete"? <DeleteConfirmation noDelete={props.handleCloseModal} yesDelete={props.yesDelete}/>: ""}
       {props.modalContent === "DeleteCard"? <DeleteConfirmation noDelete={props.handleCloseModal} yesDelete={props.handleDeleteCard}/>: ""}
       {props.modalContent === "Response"? <SendResponseToUser send={props.sendResponse} cancel={props.handleCloseModal}/>: ""}
       
     </div>
   );
-
+  
   return (
     <div>
       {/* <button type="button" onClick={handleOpen}>
         Open Modal
       </button> */}
-      <Modal
+      <Modal 
+
         open={props.open}
         onClose={props.handleCloseModal}
         aria-labelledby="simple-modal-title"
         aria-describedby="simple-modal-description"
+        //disableScrollLock={true}
       >
         {body}
       </Modal>

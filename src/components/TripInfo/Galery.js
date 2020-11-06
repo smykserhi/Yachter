@@ -70,23 +70,23 @@ export default function Galery({card}) {
     const handleOnClick=(e)=>{
         console.log("Main url changed")
         setUtl(e.target.src)
-        setDis(e.target.alt)
+        //setDis(e.target.alt)
      }
      
      //console.log("yatchPhoto", card.yatchPhoto && card.yatchPhoto[0].imgUrl)
      card.yatchPhoto && card.yatchPhoto.map((el, index)=>{                   
             tileData.push({
-                img: el.imgUrl,
-                title: el.dis,
-                author: el.dis,
+                img: el,
+                title: `Photo ${index+1}`,
+                author: `Photo ${index+1}`
                 })        
      })
      //card.yatchPhoto && setUtl(card.yatchPhoto[0].imgUrl)
      useEffect(() => {
         // Обновляем заголовок документа с помощью API браузера
         if(url === null && card.yatchPhoto ){
-            setUtl(card.yatchPhoto[0].imgUrl)
-            setDis(card.yatchPhoto[0].dis)
+            setUtl(card.yatchPhoto[0])
+            setDis(card.shipName)
             //firstSetUp = false
         }
         

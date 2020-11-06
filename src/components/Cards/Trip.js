@@ -48,7 +48,7 @@ const useStyles = makeStyles((theme) => ({
 export default function Trip(props) {
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
-const { userId, uid, title, startDate, daysAmount, imgUrl, disShort,disLong} = props.card
+const { userId, uid, title, startDate, daysAmount, imgUrl, tripDesacription,disLong} = props.card
 //console.log(props.card)
   const handleExpandClick = () => {
     setExpanded(!expanded);
@@ -86,7 +86,7 @@ const { userId, uid, title, startDate, daysAmount, imgUrl, disShort,disLong} = p
       />
       <CardContent>
         <Typography variant="body2" color="textSecondary" component="p">
-          {disShort}
+          {tripDesacription}
         </Typography>
       </CardContent>
       <CardActions disableSpacing>
@@ -142,7 +142,7 @@ const { userId, uid, title, startDate, daysAmount, imgUrl, disShort,disLong} = p
         <CardContent>
           <Typography paragraph>Method:</Typography>
           <Typography paragraph>
-            {disShort}
+            {tripDesacription}
           </Typography>
           <Typography paragraph>
             {disLong}
