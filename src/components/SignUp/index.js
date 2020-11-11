@@ -4,6 +4,14 @@ import { compose } from 'recompose';
 import * as ROUTES from '../../constants/routes';
 import { withFirebase } from '../Firebase';
 import SignUpTemplate from "./Temolate"
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
+//import Alert from "../Alert"
+
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
+
 
 //coment
 const SignUpPage = () => (  
@@ -18,6 +26,7 @@ const INITIAL_STATE = {
   experiance: 0,
   captain : false,
   error: null,
+  open: false,
 }; 
 
 class SignUpFormBase extends Component {
@@ -49,7 +58,7 @@ class SignUpFormBase extends Component {
         this.props.history.push(ROUTES.MAIN);
       })
       .catch(error => {
-        this.setState({ error });
+        this.setState({ error ,open: true});
       });
  
     event.preventDefault();
@@ -58,6 +67,13 @@ class SignUpFormBase extends Component {
   onChange = event => {
     if(event.target.name === "captain") this.setState({[event.target.name]: event.target.checked})
     else this.setState({ [event.target.name]: event.target.value });
+  };
+  handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    this.setState({open: false})
   };
  
   render() {
@@ -86,7 +102,12 @@ class SignUpFormBase extends Component {
             captain = {this.state.captain}
 
           />
-        {error && <p>{error.message}</p>}
+          <Snackbar open={this.state.open} autoHideDuration={3000} onClose={this.handleClose}>
+            <Alert  onClose={this.handleClose} severity="warning">
+              {error && error.message}
+            </Alert>
+           </Snackbar>
+        {/*error && <p>{error.message}</p>*/}
         </div>      
     );
   }

@@ -7,16 +7,11 @@ const AppContext = React.createContext(null);
 export class AppProvider extends Component  {
     
     state = {
-        autorised: false
+        message: false
     }
-    setAutorised = (val)=>{
+    setMessage = (val)=>{
         console.log("Autirization", val)        
-        this.setState(()=>{
-            return{
-                autorised : val  
-            }
-            
-        })
+        this.setState({message : val   })
     }
     render(){
         console.log("appdata", this.state.autorised)

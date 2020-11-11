@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function RequestTemplate( props) {
   const classes = useStyles();
-    //console.log(props.request)
+    //console.log("Request", props.request)
     let buttonText
     if(props.userRequsts){
         buttonText = "Send response"
@@ -44,7 +44,8 @@ export default function RequestTemplate( props) {
                         captainRequestId: props.request.captainRequestId, 
                         userId: props.request.senderUid, 
                         myRequestId: props.requestId,
-                        adminRequestId: props.request.adminRequestId
+                        adminRequestId: props.request.adminRequestId,
+                        request: props.request
                     }
         //console.log("request", props.request)
         if(e.target.textContent === "Delete request") props.handleDelete(response)
@@ -57,6 +58,16 @@ export default function RequestTemplate( props) {
     <div className={classes.root}>
      <Box border={1} {...defaultProps} >
         <Grid container   direction="row"  justify="flex-start"  alignItems="center" spacing={3}>
+            <Grid item xs={12} md={6} >
+                <Typography variant="h5" gutterBottom>
+                Trip: {props.request.tripTItle}
+                </Typography>         
+            </Grid>
+            <Grid item xs={12} md={6} >
+                <Typography variant="h5" gutterBottom>
+                Ship name: {props.request.shipName}
+                </Typography>         
+            </Grid>
             <Grid item xs={12} md={6} >
                 <Typography variant="h5" gutterBottom>
                 Name: {props.request.first_name} {props.request.last_name}

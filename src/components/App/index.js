@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import Navigation from '../Navigation';
@@ -17,6 +17,7 @@ import {Box} from "@material-ui/core"
 import { makeStyles } from '@material-ui/core/styles';
 import {AppConsumer} from "../AppContext"
 import TripInfo from "../TripInfo"
+import AddTripTemplate from "../AddTrip/AddTripTemplate"
  
 const useStyles = makeStyles({
   
@@ -45,21 +46,23 @@ const myTheme = createMuiTheme({
 
 const App = () => {
   const classes = useStyles();
+  
   return(
     <Router>
       <ThemeProvider theme={myTheme}>
         <AppConsumer>
           {consumer =>(
             <Box className = {classes.mainGrid}>
-              <Navigation />      
+              <Navigation  />      
               <Route exact path={ROUTES.MAIN} component={LandingPage} />
               <Route path={ROUTES.SIGN_UP} component={SignUpPage} />
               <Route path={ROUTES.SIGN_IN} render={()=>(<SignInPage />)} />
               <Route path={ROUTES.PASSWORD_FORGET} component={PasswordForgetPage} />
               <Route path={ROUTES.HOME} component={HomePage} />
-              <Route path={ROUTES.ACCOUNT} component={AccountPage} />
+              <Route path={ROUTES.ACCOUNT} render={()=>(<AccountPage />)}/>
               <Route path={ROUTES.ADMIN} component={AdminPage} />
               <Route path={ROUTES.TRIP_INFO} component={TripInfo}/>
+              <Route path={`${ROUTES.ADD_TRIP}/:userId`} component={AddTripTemplate}/>
               <Footer bottom/>
             </Box>
           )}

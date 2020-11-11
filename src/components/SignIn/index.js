@@ -5,8 +5,13 @@ import { withFirebase } from '../Firebase';
 import * as ROUTES from '../../constants/routes';
 import SignInTemplate from "./Template"
 import {AppConsumer} from "../AppContext"
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
 //import Alert from "../Alert"
 
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 
 let setAutorization 
 const SignInPage = () => ( 
@@ -24,6 +29,7 @@ const INITIAL_STATE = {
   email: '',
   password: '',
   error: null,
+  open: false,
 };
  //coment
 class SignInFormBase extends Component {
@@ -41,11 +47,11 @@ class SignInFormBase extends Component {
       .then(() => {
         console.log("singIn succses")
         this.setState({ ...INITIAL_STATE });
-        setAutorization(true)//set AppContext autorisation to true
+        //setAutorization(true)//set AppContext autorisation to true
         this.props.history.push(ROUTES.MAIN);
       })
       .catch(error => {
-        this.setState({ error });
+        this.setState({ error ,open: true });
       });
  
     event.preventDefault();
@@ -53,6 +59,19 @@ class SignInFormBase extends Component {
  
   onChange = event => {
     this.setState({ [event.target.name]: event.target.value });
+  };
+  //const [open, setOpen] = React.useState(false);
+
+  // handleClick = () => {
+  //   this.setState({open: true})
+  // };
+
+  handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    this.setState({open: false})
   };
  
   render() {
@@ -72,7 +91,12 @@ class SignInFormBase extends Component {
 
           />
         {/* <Alert  /> */}
-        {error ?  <p >{error.message}</p> : ""}
+        <Snackbar open={this.state.open} autoHideDuration={3000} onClose={this.handleClose}>
+          <Alert  onClose={this.handleClose} severity="warning">
+            {error && error.message}
+          </Alert>
+        </Snackbar>
+        {/*error ?  <p >{error.message}</p> : ""*/}
         
         </div>
       // </form>

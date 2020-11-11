@@ -3,14 +3,11 @@ import {withFirebase} from "../Firebase"
 import Cards from "../Cards"
 import Box from '@material-ui/core/Box'
 import Typography from '@material-ui/core/Typography';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 
 
-// const styles = {
-//   paperContainer: {
-//     backgroundColor: 'rgba(255, 255, 255, 0.9)',
-//   }
-// };
+
 class LandingPage extends Component {
   state = {
     loading: false,
@@ -49,13 +46,14 @@ class LandingPage extends Component {
             flexWrap="wrap"
             alignContent="center"  
             height={400}
+            //width={"80vw"}
             fontWeight="fontWeightMedium">
               <Typography  align	='center' variant="h2" component="h2" gutterBottom>
                   GET YOUR CHANCE TO EXTEND THE SUMMER!!!<br/><br/> YATCH TREVEL
               </Typography>
         </Box>   
         
-        {loading? <h1>Loading-----</h1>: <Cards cards={this.state.cards}/>}        
+        {loading? <CircularProgress color="secondary" size={50} />: <Cards cards={this.state.cards}/>}        
       </Box>
     )
   }

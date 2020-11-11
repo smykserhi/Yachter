@@ -24,7 +24,7 @@ export default function DeleteConfirmation(props) {
       <Grid container  direction="row"   justify="center"  alignItems="center"spacing={3}>
         <Grid container  direction="row"   justify="center" item xs={12}>
             <Typography variant="h4" gutterBottom>
-                Delete this request
+                Delete this item
             </Typography>
         </Grid>
         <Grid container  direction="row"   justify="center" item xs={6}>

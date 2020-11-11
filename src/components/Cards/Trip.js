@@ -22,13 +22,26 @@ import DeleteIcon from '@material-ui/icons/Delete';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    maxWidth: 345,
-    minWidth: 245,
-    backgroundColor: 'rgba(255, 255, 255, 0.8)'
+   
+
+    //minWidth: "15vw",
+    backgroundColor: 'rgba(255, 255, 255, 0.8)',
+    [theme.breakpoints.down('xs')]: {
+      width: "90vw",
+    },
+    // [theme.breakpoints.between('sm', 'xs')]: {
+    //   width: "80vw",
+    // },
+    [theme.breakpoints.up('md')]: {
+      width: "40vw",
+    },
+
   },
   media: {
     height: 0,
     paddingTop: '56.25%', // 16:9
+    
+    backgroundSize: "cover",
   },
   expand: {
     transform: 'rotate(0deg)',
@@ -43,12 +56,15 @@ const useStyles = makeStyles((theme) => ({
   avatar: {
     backgroundColor: red[500],
   },
+  discription:{
+    minHeight : "7vh"    
+  }
 }));
 
 export default function Trip(props) {
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
-const { userId, uid, title, startDate, daysAmount, imgUrl, tripDesacription,disLong} = props.card
+const { userId, uid, title, startDate, daysDis, imgUrl, tripDesacription,disLong} = props.card
 //console.log(props.card)
   const handleExpandClick = () => {
     setExpanded(!expanded);
@@ -56,7 +72,7 @@ const { userId, uid, title, startDate, daysAmount, imgUrl, tripDesacription,disL
   //return userId and cardId
  const handleEdit=()=>{   
    //console.log("Card",props.card.cardPostId)
-    const response = {userId: userId, cardId : props.cardId, cardPostId: props.card.cardPostId }
+    const response = {userId: userId, cardId : props.cardId, cardPostId: props.card.cardPostId, card: props.card }
     props.handleEdit(response)
  }
  const handleDelete=()=>{   
@@ -71,20 +87,16 @@ const { userId, uid, title, startDate, daysAmount, imgUrl, tripDesacription,disL
           {< DirectionsBoatRoundedIcon/>}
           </Avatar>
         }
-        // action={
-        //   <IconButton aria-label="settings">
-        //     <MoreVertIcon />
-        //   </IconButton>
-        // }
+        
         title= {title}
         subheader= {startDate}
       />
-      <CardMedia
+      <CardMedia 
         className={classes.media}
         image={imgUrl}
         title={title}
       />
-      <CardContent>
+      <CardContent className={classes.discription}>
         <Typography variant="body2" color="textSecondary" component="p">
           {tripDesacription}
         </Typography>
@@ -140,15 +152,12 @@ const { userId, uid, title, startDate, daysAmount, imgUrl, tripDesacription,disL
       </CardActions>
       <Collapse in={expanded} timeout="auto" unmountOnExit>
         <CardContent>
-          <Typography paragraph>Method:</Typography>
-          <Typography paragraph>
-            {tripDesacription}
-          </Typography>
-          <Typography paragraph>
-            {disLong}
-          </Typography>
-          
-          
+            {daysDis.map((el,index)=>{
+              return (
+              <Typography key={index} paragraph>
+                 Day {index+1} : {el.dayDis}
+              </Typography>)
+            })}         
         </CardContent>
       </Collapse>
     </Card>

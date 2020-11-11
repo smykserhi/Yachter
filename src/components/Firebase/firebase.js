@@ -34,7 +34,7 @@ class Firebase {
    //sing out
     doSignOut = () => {      
       this.auth.signOut();
-      console.log("singOut succses") 
+      //console.log("singOut succses") 
      }
    //reset password
     doPasswordReset = email => this.auth.sendPasswordResetEmail(email);
@@ -63,10 +63,10 @@ class Firebase {
     //newCard should be Object
     saveReuest = (uid, newRequest) =>{ 
         this.db.ref(`users/${uid}/myRequests`).push(newRequest , function(error) {
-        if (error) {
-              console.log("New myRequests create error")
+        if (error) {          
+          console.log("New myRequests create error")          
         } else {
-        console.log(" New myRequests saved successfully!")        
+          console.log(" New myRequests saved successfully!")             
         }})
         
     }
@@ -124,6 +124,26 @@ class Firebase {
           console.log(" Card data updated saved successfully!")        
         }})
     }
+    updateCard=(cardId, userId, userCardId, data)=>{
+      let response 
+      this.db.ref(`cards/${cardId}/`).update(data , function(error) {
+        if (error) {
+              console.log("Card data updated error")
+              response="error"
+        } else {
+          console.log(" Card data updated saved successfully!") 
+          response="success"
+        }})
+      this.db.ref(`users/${userId}/myCards/${userCardId}`).update(data , function(error) {
+          if (error) {
+                console.log("Card data updated error")
+                response="error"
+          } else {
+            console.log(" Card data updated saved successfully!")   
+            response="success"     
+          }})
+          return response
+   }
     deleteCardData = (userId,  userCardId, cardId,) =>{ 
       //update user card
       this.db.ref(`users/${userId}/myCards/${userCardId}`).remove( function(error) {
@@ -142,7 +162,7 @@ class Firebase {
 
     }
     addMessageToUser = (userId, message)=>{
-      this.db.ref(`users/${userId}/Messages`).push(message , function(error) {
+      this.db.ref(`users/${userId}/messages`).push(message , function(error) {
         if (error) {
               console.log("New message create error")
         } else {
@@ -176,6 +196,14 @@ class Firebase {
           console.log(" Data admin card update saved successfully!")        
         }})
 
+    }
+    deleteMessageFromUser=(userId, messageId)=>{
+      this.db.ref(`users/${userId}/messages/${messageId}`).remove( function(error) {
+        if (error) {
+              console.log("Mesasge Delete error")
+        } else {
+        console.log("Message Delete successfully!")        
+        }})
     }
     deleteRequestData = (userId, userRequestId, captainId, capRequestId, adminReqId) =>{ 
       //update user card

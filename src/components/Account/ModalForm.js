@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
         width: "90vw",
       },
       [theme.breakpoints.up('md')]: {
-        width: "40vw",
+        width: "60vw",
       },
   
   },
@@ -62,12 +62,13 @@ const deleteTempImage=(func) =>{
 
   const body = (
     <div style={modalStyle} className={classes.paper}>
-      {props.modalContent === "ChangePassword"? <PasswordChangeForm/>: ""}
-      {props.modalContent === "ResetPassword"? <PasswordForgetForm/>: ""}
-      {props.modalContent === "EditProfile"? <EditProfile onSubmit={onSubmitEdit} />: ""}
-      {props.modalContent === "AddTrip"? <AddTripTemplate deleteTempImage={(func)=>props.handleCloseModal(func)} saveResponse={props.saveNewTrip} firebase={props.firebase}/>: ""}
+      {props.modalContent === "ChangePassword"? <PasswordChangeForm handleSaveNewPassword={props.handleSaveNewPassword}/>: ""}
+      {props.modalContent === "ResetPassword"? <PasswordForgetForm />: ""}
+      {props.modalContent === "EditProfile"? <EditProfile requestParam={props.requestParam} onSubmit={onSubmitEdit} />: ""}
+      {props.modalContent === "AddTrip"? <AddTripTemplate requestParam={props.requestParam} cancel={props.handleCloseModal} />: ""}
       {props.modalContent === "Delete"? <DeleteConfirmation noDelete={props.handleCloseModal} yesDelete={props.yesDelete}/>: ""}
-      {props.modalContent === "DeleteCard"? <DeleteConfirmation noDelete={props.handleCloseModal} yesDelete={props.handleDeleteCard}/>: ""}
+      {props.modalContent === "DeleteCard"? <DeleteConfirmation noDelete={props.handleCloseModal} yesDelete={props.handleDeleteCard} />: ""}
+      {props.modalContent === "DeleteMessage"? <DeleteConfirmation noDelete={props.handleCloseModal} yesDelete={props.handleConfirmDeleteMessage}/>: ""}
       {props.modalContent === "Response"? <SendResponseToUser send={props.sendResponse} cancel={props.handleCloseModal}/>: ""}
       
     </div>

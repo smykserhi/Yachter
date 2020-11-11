@@ -4,6 +4,13 @@ import { withFirebase } from '../Firebase';
 import * as ROUTES from '../../constants/routes';
 import Forgot from "./Forgot"
 import { compose } from 'recompose';
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
+//import Alert from "../Alert"
+
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
  
 const PasswordForgetPage = () => (  
     <PasswordForgetForm /> 
@@ -12,6 +19,7 @@ const PasswordForgetPage = () => (
 const INITIAL_STATE = {
   email: '',
   error: null,
+  open: false,
 };
  
 class PasswordForgetFormBase extends Component {
@@ -31,7 +39,7 @@ class PasswordForgetFormBase extends Component {
         this.props.history.push(ROUTES.SIGN_IN);
       })
       .catch(error => {
-        this.setState({ error });
+        this.setState({ error ,open: true});
       });
  
     event.preventDefault();
@@ -39,6 +47,13 @@ class PasswordForgetFormBase extends Component {
  
   onChange = event => {
     this.setState({ [event.target.name]: event.target.value });
+  };
+  handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    this.setState({open: false})
   };
  
   render() {
@@ -53,7 +68,12 @@ class PasswordForgetFormBase extends Component {
           onSubmit = {this.onSubmit}
           isInvalid = {isInvalid}
         />
-        {error && <p>{error.message}</p>}
+         <Snackbar open={this.state.open} autoHideDuration={3000} onClose={this.handleClose}>
+            <Alert  onClose={this.handleClose} severity="warning">
+              {error && error.message}
+            </Alert>
+          </Snackbar>
+        {/*error && <p>{error.message}</p>*/}
         </div>      
     );
   }

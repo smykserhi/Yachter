@@ -53,7 +53,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SignUpTemplate(props) {
   const classes = useStyles();
-  const [experiance, setExperiance] = React.useState(0);
+  const [experiance, setExperiance] = React.useState(1);
   const experianceOnChange = (e)=>{
     setExperiance(e.target.value)
     props.onChange(e)

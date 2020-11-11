@@ -31,12 +31,12 @@ const BoxInGrid = styled(Box)({
 const GridItem =({LogoIcon, text})=>(
     <Grid  item xs={12} sm={6} lg={4}>
     <BoxInGrid  >
-        {LogoIcon == "DirectionsBoatIcon"? <DirectionsBoatIcon fontSize="inherit"/>: ""}
-        {LogoIcon == "MonetizationOnIcon"? <MonetizationOnIcon fontSize="inherit"/>: ""}
-        {LogoIcon == "DateRangeIcon"? <DateRangeIcon fontSize="inherit"/>: ""}
-        {LogoIcon == "PersonPinCircleIcon"? <PersonPinCircleIcon fontSize="inherit"/>: ""}
-        {LogoIcon == "PinDropIcon"? <PinDropIcon fontSize="inherit"/>: ""}
-        {LogoIcon == "ViewWeekIcon"? <ViewWeekIcon fontSize="inherit"/>: ""}
+        {LogoIcon === "DirectionsBoatIcon"? <DirectionsBoatIcon fontSize="inherit"/>: ""}
+        {LogoIcon === "MonetizationOnIcon"? <MonetizationOnIcon fontSize="inherit"/>: ""}
+        {LogoIcon === "DateRangeIcon"? <DateRangeIcon fontSize="inherit"/>: ""}
+        {LogoIcon === "PersonPinCircleIcon"? <PersonPinCircleIcon fontSize="inherit"/>: ""}
+        {LogoIcon === "PinDropIcon"? <PinDropIcon fontSize="inherit"/>: ""}
+        {LogoIcon === "ViewWeekIcon"? <DateRangeIcon fontSize="inherit"/>: ""}
         <BoxWithText p={ {xs:"2vh 2vw", sm: "1vh 2vw", md: "1vh 1vw"}} bgcolor="primary.main" >
            <Typography align="center" variant="h5" component="h2">
                 {text}

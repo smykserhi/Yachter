@@ -8,11 +8,19 @@ import GridItem from "./GridItem"
 import HorisontalStepper from "./Stepper"
 import Galery from "./Galery"
 import Button from '@material-ui/core/Button';
-import Alert from '@material-ui/lab/Alert';
+//import Alert from '@material-ui/lab/Alert';
 import * as ROUTES from '../../constants/routes';
 //import ModalPopUp from '@material-ui/core/Modal';
 import ModalPopUp from "./ModalPopUp"
 import { TheatersOutlined } from '@material-ui/icons';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
+//import Alert from "../Alert"
+
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 
 
 //box for beckground 
@@ -55,7 +63,8 @@ class LandingPage extends Component {
     postId: "",   
     alertSuccess: false,
     authUser: null,
-    openModal: false
+    openModal: false,
+    alert: false,
     
   };
   
@@ -118,21 +127,34 @@ class LandingPage extends Component {
     //console.log("modal close")
     const currentUserId = this.state.authUser.uid
     const captainId = this.state.card.userId
+    const tripTItle= this.state.card.title
+    const shipName = this.state.card.shipName
     let dataToCaptain
-    const responseData = {... data, postId : this.state.postId, senderUid : currentUserId, captainId: captainId}    
+    const responseData = {... data, postId : this.state.postId, senderUid : currentUserId, captainId, tripTItle, shipName}    
     //console.log("responseData", responseData)
     responseData.share_data ?  dataToCaptain = responseData : dataToCaptain = {first_name : responseData.first_name, email: responseData.email} //if user doesn't want to share personal data
     const captainRequestId = this.props.firebase.addReuest(captainId,dataToCaptain) //save in captain profile
     const adminRequestId = this.props.firebase.saveToAdmin({...responseData, captainRequestId}) //save to admin page
-    this.props.firebase.saveReuest(currentUserId,{...responseData, captainRequestId, adminRequestId}) //save to uder profile
+    this.props.firebase.saveReuest(currentUserId,{...responseData, captainRequestId, adminRequestId})
+    this.setState({ alert: true})
+   
+    //save to uder profile
     //console.log("id= ",captainRequestId, test)
     
-    this.setState({alertSuccess:true}) //show  success alert
-    setTimeout(() => {
-            this.setState({alertSuccess:false})
-          }, 3000);
+    this.setState({alertSuccess:true, alert: true}) //show  success alert
+    // setTimeout(() => {
+    //         this.setState({alertSuccess:false})
+    //         this.props.history.push(ROUTES.MAIN)
+    //       }, 3000);
       
 
+  };
+  handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    this.setState({alert: false})
   };
   render(){
     //console.log("cards lending", cards)
@@ -166,7 +188,7 @@ class LandingPage extends Component {
                 <GridItem key={2} LogoIcon = {"DateRangeIcon"} text={ card.startDate}/>
                 <GridItem key={3} LogoIcon = {"PersonPinCircleIcon"} text={card.portDeparture}/>
                 <GridItem key={4} LogoIcon = {"MonetizationOnIcon"} text={card.fee}/>
-                <GridItem key={5} LogoIcon = {"ViewWeekIcon"} text={`${card.endDate} days`}/>
+                <GridItem key={5} LogoIcon = {"ViewWeekIcon"} text={card.endDate}/>
                 <GridItem key={6} LogoIcon = {"PinDropIcon"} text={card.portOfArival}/>               
              </Grid>
              </BoxInGrid>
@@ -195,7 +217,7 @@ class LandingPage extends Component {
                 
         </MyBox>
         <BoxWithAlrt  minHeight="15vh">          
-          {this.state.alertSuccess ? <Alert m={5} severity="success">Request sent successfully. Captain will contact you soon</Alert> : ""}
+          {/*this.state.alertSuccess ? <Alert m={5} severity="success">Request sent successfully. Captain will contact you soon</Alert> : ""*/}
         </BoxWithAlrt>
         
         <MyBox  align="center">
@@ -203,9 +225,14 @@ class LandingPage extends Component {
               Send Request
           </SendRequesrButton>
         </MyBox>
-        <Box  minHeight="15vh"/>                
+        <Box  minHeight="15vh"/>  
+        <Snackbar open={this.state.alert} autoHideDuration={3000} onClose={this.handleClose}>
+          <Alert  onClose={this.handleClose} severity="success">
+            Request sent successfully. Captain will contact you soon
+          </Alert>           
+        </Snackbar>              
         <ModalPopUp open={this.state.openModal} onClose={this.handleCloseModal} onSubmit={this.handleSubmitModal}/>          
-        {loading? <h1>Loading-----</h1>: ""}        
+        {loading? <CircularProgress color="secondary" />: ""}        
       </Box>
     )
   }

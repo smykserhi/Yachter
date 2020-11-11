@@ -6,3 +6,4 @@ export const ACCOUNT = '/account';
 export const ADMIN = '/admin';
 export const PASSWORD_FORGET = '/pw-forget';
 export const TRIP_INFO = '/trip-info/:id';
+export const ADD_TRIP = '/add-trip';

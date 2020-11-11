@@ -1,4 +1,4 @@
-import React,{useState} from 'react';
+import React,{useState,useEffect} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
 import ModalForm from "./ModalForm"
@@ -18,11 +18,17 @@ function getModalStyle() {
 
 const useStyles = makeStyles((theme) => ({
   paper: {
+    maxHeight : "100vh",       
+    overflow:'scroll',//make modal scrolable    
     position: 'absolute',    
     backgroundColor: theme.palette.background.paper,
     border: '2px solid #000',
     boxShadow: theme.shadows[5],
     padding: theme.spacing(2, 4, 3),
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
     [theme.breakpoints.down('sm')]: {
       width: "95vw",
     },
@@ -33,22 +39,29 @@ const useStyles = makeStyles((theme) => ({
       width: "55vw"
     },
   },
+  container: {
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center"
+  }
 }));
 
 export default function ModalPopUp( props) {
   const classes = useStyles();
   // getModalStyle is not a pure function, we roll the style only on the first render
   const [modalStyle] = React.useState(getModalStyle);
-  const [first_name, setFirst_name] = React.useState(null);
-  const [last_name, setLast_name] = React.useState(null);
-  const [address, setAddress] = React.useState(null);
-  const [city, setCity] = React.useState(null);
-  const [zip_code, setZip_code] = React.useState(null);
+  const [first_name, setFirst_name] = React.useState("");
+  const [last_name, setLast_name] = React.useState("");
+  const [address, setAddress] = React.useState("");
+  const [city, setCity] = React.useState("");
+  const [zip_code, setZip_code] = React.useState("");
   const [age, setAge] = React.useState(21);
   const [share_data, setShare_data] = React.useState(true);
   const [want_help, setWant_help] = React.useState(false);
-  const [phone, setPhone] = React.useState(null);
-  const [email, setEmail] = React.useState(null);
+  const [phone, setPhone] = React.useState("");
+  const [email, setEmail] = React.useState("");
+  const [setUp, setSetUp] = React.useState(true)
 
   
 
@@ -90,9 +103,28 @@ export default function ModalPopUp( props) {
     //console.log("userData",userData)
 
   }
+  useEffect(() => {
+    if(props.requestParam && setUp){
+      const request = props.requestParam.request
+      //console.log(request)
+      setFirst_name(request.first_name)
+      setLast_name(request.last_name)
+      setAddress(request.address)
+      setCity(request.city)
+      setZip_code(request.zip_code)
+      setAge(request.age)
+      setShare_data(request.share_data)
+      setWant_help(request.want_help)
+      setPhone(request.phone)
+      setEmail(request.email)
+      setSetUp(false)
+    }
+    
+    
+  });
     //if(props.open && !open)setOpen(true)
   return (
-    <div>      
+    <div className={classes.container}>      
       <Modal
         open={props.open}
         onClose={handleClose}
@@ -100,7 +132,22 @@ export default function ModalPopUp( props) {
         aria-describedby="simple-modal-description"
       >
         <div style={modalStyle} className={classes.paper}>
-          <ModalForm want_help={want_help} share_data={share_data} onChange={onChangeForm} onSubmit={onSubmitForm}/>
+         
+            <ModalForm 
+                first_name={first_name}
+                last_name={last_name}
+                address={address}
+                city={city}
+                zip_code={zip_code}
+                age={age}
+                want_help={want_help} 
+                share_data={share_data} 
+                onChange={onChangeForm} 
+                onSubmit={onSubmitForm}
+                phone={phone}
+                email={email}
+                />      
+          
           
         </div>
       </Modal>

@@ -6,14 +6,15 @@ import Paper from '@material-ui/core/Paper';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    display: 'flex',
-    
-    justifyContent: "flex-start",
+    display: 'flex',    
     [theme.breakpoints.down('sm')]: {
         flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center"
       },
       [theme.breakpoints.up('md')]: {
         flexDirection: "row",
+        justifyContent: "flex-start",
       },
     //   [theme.breakpoints.up('lg')]: {
     //     backgroundColor: green[500],
@@ -36,9 +37,21 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: "4",
   },
   cover: {
-    height: 350,
-    width: 350,
+    
+    [theme.breakpoints.down('sm')]: {
+      height: "40vw",
+      width: "60vw",
+    },
+    [theme.breakpoints.up('md')]: {
+      height: "20vw",
+      width: "30vw",
+    },
   },
+  image: {
+    width: "100%",
+    height: "100%"
+
+  }
 //   controls: {
 //     display: 'flex',
 //     alignItems: 'center',
@@ -57,16 +70,15 @@ export default function DayDis({header,bodyText, imgUrl }) {
 
   return (
      
-        <Paper elevation={3}  className={classes.root}>      
-            <img className={classes.cover} src ={imgUrl} alt="img"
+        <Paper elevation={3}  className={classes.root}> 
+            <Box className={classes.cover}> 
+              <img className={classes.image}  src ={imgUrl} alt="img"/>       
+            </Box>     
                 
-               
-            />
-            
             <Box className={classes.details}>
-                <Typography component="h5" variant="h5">
+                {/* <Typography component="h5" variant="h5">
                     {header}
-                </Typography>
+                </Typography> */}
                 <Typography className={classes.component} component="h6" variant="h5">
                     {bodyText}
                 </Typography>

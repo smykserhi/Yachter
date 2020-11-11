@@ -25,10 +25,12 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(8),
     display: 'flex',
     flexDirection: 'column',
+    justifyContent: "center",
     alignItems: 'center',
     backgroundColor: 'rgba(255, 255, 255, 0.9)',
-    padding : "30px",
+    //padding : "30px",
     borderRadius: "15px",
+    //overflow: "scroll"
     //width: "85%"
   },
   avatar: {
@@ -63,9 +65,9 @@ export default function ModalForm(props) {
   const ages = new Array()
   for(let i=21; i<100;i++) ages.push(i)
   //console.log(age)
-  const [age, setAge] = React.useState(21);
+  //const [age, setAge] = React.useState(21);
   const handleOnChangeSelect = (e)=>{
-    setAge(e.target.value)
+    //setAge(e.target.value)
     props.onChange(e)
   }
   return (
@@ -80,7 +82,7 @@ export default function ModalForm(props) {
         </Typography>
         <form className={classes.form} onSubmit={props.onSubmit}>
           <Grid container spacing={2}>
-            <Grid item xs={6}>
+            <Grid item md={6} sm={12}>
               <TextField
                 autoComplete="fname"
                 name="first_name"
@@ -90,11 +92,11 @@ export default function ModalForm(props) {
                 id="first_name"
                 label="First Name"
                 autoFocus
-                
+                value={props.first_name}                
                 onChange={props.onChange}
               />
             </Grid>  
-            <Grid item xs={6}>
+            <Grid item  md={6} sm={12}>
               <TextField
                 autoComplete="fname"
                 name="last_name"
@@ -103,11 +105,12 @@ export default function ModalForm(props) {
                 fullWidth
                 id="last_name"
                 label="Last Name"
+                value={props.last_name}  
                 //autoFocus
                 onChange={props.onChange}
               />
             </Grid>    
-            <Grid item xs={12}>
+            <Grid item  md={12} sm={12}>
               <TextField
                 autoComplete="fname"
                 name="address"
@@ -116,11 +119,12 @@ export default function ModalForm(props) {
                 fullWidth
                 id="address"
                 label="Address"
+                value={props.address}  
                 //autoFocus
                 onChange={props.onChange}
               />
             </Grid>
-            <Grid item xs={6}>   
+            <Grid item  md={6} sm={12}>   
             <TextField
                 autoComplete="fname"
                 name="city"
@@ -129,11 +133,12 @@ export default function ModalForm(props) {
                 fullWidth
                 id="city"
                 label="City"
+                value={props.city} 
                 //autoFocus
                 onChange={props.onChange}
               />
             </Grid>  
-            <Grid item xs={6}>
+            <Grid item  md={6} sm={12}>
               <TextField
                 autoComplete="fname"
                 name="zip_code"
@@ -143,6 +148,7 @@ export default function ModalForm(props) {
                 type="number"
                 id="zip_code"
                 label="Zip code"
+                value={props.zip_code} 
                 //maxLength={3}
                 //inputProps={{ maxLength: 3 }}
                 onInput = {(e) =>{
@@ -152,13 +158,13 @@ export default function ModalForm(props) {
                 onChange={props.onChange}
               />
             </Grid>   
-            <Grid item xs={6}>
+            <Grid item  md={6} sm={12}>
               <FormControl variant="outlined" className={classes.formControl} >
                 <InputLabel id="demo-simple-select-outlined-label">Age*</InputLabel>
                 <Select
                   labelId="age"
                   id="age"
-                  value={age}
+                  value={props.age}
                   name="age"
                   type="number"
                   onChange={handleOnChangeSelect}
@@ -169,7 +175,7 @@ export default function ModalForm(props) {
               </FormControl>
 
             </Grid> 
-            <Grid item xs={6}>
+            <Grid item  md={6} sm={12}>
               <Box className={classes.switch}>
                 <Typography variant="subtitle2" component="label"> Agre share my data with captain</Typography>
                 <Switch
@@ -192,7 +198,7 @@ export default function ModalForm(props) {
                 />
               </Box>
             </Grid> 
-            <Grid item xs={6}>
+            <Grid item  md={6} sm={12}>
               <TextField
                 variant="outlined"
                 required
@@ -201,6 +207,7 @@ export default function ModalForm(props) {
                 label="Phobe"
                 name="phone"
                 type="number"
+                value={props.phone}
                 autoComplete=""
                 onInput = {(e) =>{ //set up max value for TextField
                     e.target.value = Math.max(0, parseInt(e.target.value) ).toString().slice(0,10)
@@ -208,7 +215,7 @@ export default function ModalForm(props) {
                 onChange={props.onChange}
               />
             </Grid>        
-            <Grid item xs={6}>
+            <Grid item  md={6} sm={12}>
               <TextField
                 variant="outlined"
                 required
@@ -217,6 +224,7 @@ export default function ModalForm(props) {
                 label="Email Address"
                 name="email"
                 type="email"
+                value={props.email}
                 autoComplete="email"
                 onChange={props.onChange}
               />

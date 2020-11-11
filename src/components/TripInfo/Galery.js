@@ -5,6 +5,7 @@ import Box from "@material-ui/core/Box"
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
 import Paper from '@material-ui/core/Paper';
+import { LinearScale } from '@material-ui/icons';
 //import tileData from './tileData';
 
 const useStyles = makeStyles((theme) => ({
@@ -13,6 +14,7 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "flex-start",
     [theme.breakpoints.down('sm')]: {
         flexDirection: "column",
+        alignItems: "center"
       },
       [theme.breakpoints.up('md')]: {
         flexDirection: "row",
@@ -32,9 +34,20 @@ const useStyles = makeStyles((theme) => ({
   content: {
     flexGrow: "4",
   },
-  cover: {
-    height: 300,
-    width: 300,
+  cover: {    
+    [theme.breakpoints.down('sm')]: {
+      height: "40vw",
+      width: "60vw",
+    },
+    [theme.breakpoints.up('md')]: {
+      height: "20vw",
+      width: "30vw",
+    },
+  },
+  image: {
+    width: "100%",
+    height: "100%"
+
   },
   //Galery classes
   galeryRoot: {
@@ -49,6 +62,15 @@ const useStyles = makeStyles((theme) => ({
     flexWrap: 'nowrap',
     // Promote the list into his own layer on Chrome. This cost memory but helps keeping high FPS.
     transform: 'translateZ(0)',
+    
+    // [theme.breakpoints.down('sm')]: {
+    //   height: "40%",
+     
+    // },
+    // [theme.breakpoints.up('md')]: {
+    //   height: "100%",
+     
+    // },
   },
   title: {
     color: theme.palette.primary.light,
@@ -98,9 +120,11 @@ export default function Galery({card}) {
                     <Typography className={classes.component} component="h6" variant="h5">
                         {dis}
                     </Typography>
-                </Box>   
-                <img className={classes.cover} src= {url} title="Day foto"
-                />     
+                </Box> 
+                <Box  className={classes.cover}>
+                 <img className={classes.image} src={url} title="Day foto" />
+                </Box>  
+                     
         </Paper>
          <div className={classes.galeryRoot}>
             <GridList className={classes.gridList} cols={2.5}>

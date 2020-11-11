@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
@@ -20,7 +20,7 @@ import CheckIcon from '@material-ui/icons/Check';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import * as ROUTES from '../../constants/routes';
 import withFirebase from "../Firebase"
-import { CollectionsBookmark, ContactlessOutlined, ContactMailOutlined } from '@material-ui/icons';
+import { ContactlessOutlined, ContactMailOutlined } from '@material-ui/icons';
 import { AuthUserContext, withAuthorization } from '../Session';
 import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 import Alert from '@material-ui/lab/Alert';
@@ -60,18 +60,18 @@ const useStyles = makeStyles((theme) => ({
     //flexGrow: 1,
     margin: "5vh 0",
     backgroundColor: theme.palette.background.paper,
-    width: "100%",
+    
     padding: "2vh 0",
     borderRadius: "15px",
-    // [theme.breakpoints.down('sm')]: {
-    //     width: "80%",
-    //   },
-    // [theme.breakpoints.down('xs')]: {
-    //     width: "95%",
-    //   },
-    // [theme.breakpoints.up('md')]: {
-    //     width: "60%",
-    //   }
+    [theme.breakpoints.down('sm')]: {
+        width: "80%",
+      },
+    [theme.breakpoints.down('xs')]: {
+        width: "95%",
+      },
+    [theme.breakpoints.up('md')]: {
+        width: "60%",
+      }
   },
   paper: {
     padding: theme.spacing(2),
@@ -104,47 +104,27 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const AddTripTemplate= (props)=> {
-    
-    //const postId = props.match.params.postId
-    const dayDisTemplate = {dayDis: "", imgUrl: null }
+    const userId = props.match.params.userId
+    const postId = props.match.params.postId
+    const dayDisTemplate = {dayDis: null, imgUrl: null }
     //const yathPhotoTemplate = {dayDis: null, imgUrl: null }
     let tempArr=[]
   const classes = useStyles();
-  const [shipName, setShipName] = React.useState("");
+  const [shipName, setShipName] = React.useState();
   const [passangers, setPassangers] = React.useState(1);
-  const [startDate, setStartDate] = React.useState("");
-  const [endDate, setEndDate] = React.useState("");
-  const [portDeparture, setPortDeparture] = React.useState("");
-  const [portOfArival, setPortOfArival] = React.useState("");
-  const [tripDesacription, setTripDesacription] = React.useState("");
-  const [title, setTitle] = React.useState("");
+  const [startDate, setStartDate] = React.useState();
+  const [endDate, setEndDate] = React.useState();
+  const [portDeparture, setPortDeparture] = React.useState();
+  const [portOfArival, setPortOfArival] = React.useState();
+  const [tripDesacription, setTripDesacription] = React.useState();
+  const [title, setTitle] = React.useState();
   const [fee, setFee] = React.useState(0);
   const [mainImgUrl, setMainImgUrl] = React.useState(null);
   const [progress, setProgress] = React.useState(0);
   const [daysDis, setDaysDis] = React.useState([dayDisTemplate]);
   const [yatchPhoto, setYatchPhoto] = React.useState([null]);
   const [message , setMessage] = React.useState(null)
-  const [setUp, setSetUp] = React.useState(true)
 
-  useEffect(() => {
-    if(setUp){
-        const card= props.requestParam.card && props.requestParam.card
-        //console.log(card && card)
-        setShipName(card.shipName)
-        setPassangers(card.passangers)
-        setStartDate(card.startDate)
-        setEndDate(card.endDate)
-        setPortDeparture(card.portDeparture)
-        setPortOfArival(card.portOfArival)
-        setTripDesacription(card.tripDesacription)
-        setTitle(card.title)
-        setFee(card.fee)
-        setMainImgUrl(card.imgUrl)
-        setDaysDis(card.daysDis)
-        setYatchPhoto(card.yatchPhoto)
-        setSetUp(false)
-    }
-  });
   //function recive image and function where save image url
  const saveImage=(img, func, arr=null, index=null)=>{
     //tempArr = [yathPhotoTemplate]
@@ -246,9 +226,6 @@ const AddTripTemplate= (props)=> {
       console.log("Delete images")
   }
   const handleOnSave = ()=>{
-    const userId = props.requestParam.userId
-      const cardPostId = props.requestParam.cardPostId
-      const cardId = props.requestParam.cardId
       const response = {
         shipName,
         passangers,
@@ -261,31 +238,18 @@ const AddTripTemplate= (props)=> {
         fee,
         imgUrl: mainImgUrl,
         daysDis,
-        yatchPhoto,
-        userId,
-        cardPostId
+        yatchPhoto
 
       }
-      //console.log("Save object", response, props)
-
-      props.firebase.updateCard(cardPostId, userId, cardId,response )
-      setMessage("success")
-      setTimeout(() => {
-            props.cancel()
-        }, 2000);
-    //   if(result&& result){
-    //     setMessage("success")
-    //   }else{
-    //     setMessage("error")
-    //   }
+      console.log("Save object", response)
     //console.log("Response in modal",{...res, userId: this.state.userId})
-    // const newResponse = {...response, userId}
-    // const cardPostId = props.firebase.addCard(newResponse)
-    // props.firebase.addCardToUser(userId, {...newResponse, cardPostId  })
-    // setMessage("success")
-    // setTimeout(() => {
-    //     props.history.push(ROUTES.ACCOUNT)     
-    // }, 2000);
+    const newResponse = {...response, userId}
+    const cardPostId = props.firebase.addCard(newResponse)
+    props.firebase.addCardToUser(userId, {...newResponse, cardPostId  })
+    setMessage("success")
+    setTimeout(() => {
+        props.history.push(ROUTES.ACCOUNT)     
+    }, 2000);
     
    
       //props.saveResponse(response)
@@ -305,7 +269,7 @@ const AddTripTemplate= (props)=> {
       setDaysDis([...tempDays])
   }
   const handleCancel=()=>{
-    props.cancel()
+    props.history.push(ROUTES.ACCOUNT)  
   }
   return (
     <div className={classes.root}>
@@ -325,9 +289,8 @@ const AddTripTemplate= (props)=> {
                     style={{ margin: 8 }}
                     //placeholder="Ship name"
                     //helperText="Full width!"
-                    //defaultValue={title}
+                    defaultValue={title}
                     fullWidth
-                    value={title&& title}
                     //margin="normal"
                     onChange={onchangeHandler}
                     InputLabelProps={{
@@ -342,11 +305,10 @@ const AddTripTemplate= (props)=> {
                     name="Fee"
                     type="number"
                     style={{ margin: 8 }}
-                    value={fee&& fee}
                     
                     //placeholder="Ship name"
                     //helperText="Full width!"
-                    //defaultValue={fee}
+                    defaultValue={fee}
                     fullWidth
                     //margin="normal"
                     onChange={onchangeHandler}
@@ -363,7 +325,7 @@ const AddTripTemplate= (props)=> {
                     style={{ margin: 8 }}
                     //placeholder="Ship name"
                     //helperText="Full width!"
-                    value={shipName&& shipName}
+                    defaultValue={shipName}
                     fullWidth
                     //margin="normal"
                     onChange={onchangeHandler}
@@ -379,7 +341,7 @@ const AddTripTemplate= (props)=> {
                         name="Passgers"
                         labelId="demo-simple-select-outlined-label"
                         id="demo-simple-select-outlined"
-                        value={passangers&& passangers}
+                        value={passangers}
                         onChange={onchangeHandler}
                         label="Passgers"
                         //defaultValue={shipName}
@@ -401,10 +363,9 @@ const AddTripTemplate= (props)=> {
                     //helperText="Full width!"
                     fullWidth
                     //margin="normal"
-                    value={startDate&& startDate}
+                    defaultValue={startDate}
                     onChange={onchangeHandler}
                     type="date"
-                    //value={}
                     InputLabelProps={{
                         shrink: true,
                     }}
@@ -421,7 +382,7 @@ const AddTripTemplate= (props)=> {
                     //helperText="Full width!"
                     fullWidth
                     //margin="normal"
-                    value={endDate&& endDate}
+                    defaultValue={endDate}
                     onChange={onchangeHandler}
                     type="date"
                     InputLabelProps={{
@@ -439,7 +400,7 @@ const AddTripTemplate= (props)=> {
                     //helperText="Full width!"
                     fullWidth
                     //margin="normal"
-                    value={portDeparture&& portDeparture}
+                    defaultValue={portDeparture}
                     onChange={onchangeHandler}
                     InputLabelProps={{
                         shrink: true,
@@ -456,7 +417,7 @@ const AddTripTemplate= (props)=> {
                     //helperText="Full width!"
                     fullWidth
                     //margin="normal"
-                    value={portOfArival&& portOfArival}
+                    defaultValue={portOfArival}
                     onChange={onchangeHandler}
                     InputLabelProps={{
                         shrink: true,
@@ -475,7 +436,7 @@ const AddTripTemplate= (props)=> {
                     //helperText="Full width!"
                     fullWidth
                     //margin="normal"
-                    value={tripDesacription&& tripDesacription}
+                    defaultValue={tripDesacription}
                     onChange={onchangeHandler}
                     InputLabelProps={{
                         shrink: true,
@@ -517,7 +478,6 @@ const AddTripTemplate= (props)=> {
                             style={{ margin: 8 }}
                             multiline={true}
                             rows="1"
-                            value={day.dayDis&& day.dayDis}
                             //placeholder="Ship name"
                             //helperText="Full width!"
                             //defaultValue={title}
