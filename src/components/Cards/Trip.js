@@ -57,14 +57,14 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: red[500],
   },
   discription:{
-    minHeight : "7vh"    
+    minHeight : "10vh"    
   }
 }));
 
 export default function Trip(props) {
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
-const { userId, uid, title, startDate, daysDis, imgUrl, tripDesacription,disLong} = props.card
+const { userId, uid, title, startDate, daysDis, imgUrl, tripDesacription,endDate} = props.card
 //console.log(props.card)
   const handleExpandClick = () => {
     setExpanded(!expanded);
@@ -89,7 +89,7 @@ const { userId, uid, title, startDate, daysDis, imgUrl, tripDesacription,disLong
         }
         
         title= {title}
-        subheader= {startDate}
+        subheader={`${startDate} to ${endDate}`}
       />
       <CardMedia 
         className={classes.media}

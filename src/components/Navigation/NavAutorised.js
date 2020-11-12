@@ -8,12 +8,15 @@ import {Box} from "@material-ui/core"
 import {withFirebase} from "../Firebase"
 import Badge from '@material-ui/core/Badge';
 import MailIcon from '@material-ui/icons/Mail';
+import DirectionsBoatRoundedIcon from '@material-ui/icons/DirectionsBoatRounded';
+import * as ROUTES from '../../constants/routes';
 
 const useStyles = makeStyles({
     
     navDisplayFlex: {
       display: `flex`,
       justifyContent: `space-between`,
+      alignItems: "center",
       marginLeft: "auto",
     },
     linkText: {
@@ -58,8 +61,8 @@ const useStyles = makeStyles({
     return (
       <AppBar position="static" color="secondary">
         <Toolbar >
-            <IconButton href="/" edge="start" color="inherit" aria-label="home">
-                <Home fontSize="large" />
+            <IconButton href={ROUTES.MAIN} edge="start" color="inherit" aria-label="home">
+                <DirectionsBoatRoundedIcon fontSize="large" />
             </IconButton>
             {props.mails? <p>test</p>:""}
             <List
@@ -70,19 +73,18 @@ const useStyles = makeStyles({
                 { user&& user.messages ?
                 <ListItem>
                 {props.mails? <p>test</p>:""}
+                <IconButton href={ROUTES.ACCOUNT} edge="start" color="inherit" aria-label="home">
                   <Badge badgeContent={Object.keys(user.messages).length} color="error">
-                    <MailIcon />
+                    <MailIcon  />
                   </Badge>
+                </IconButton>               
                 </ListItem>
                  
-                 :""}
-               
+                 :""}               
                 {navLinks.map(({ title, path }) => (
                     <a href={path} key={title} className={classes.linkText}  >
-                    <ListItem button>
-                      
-                        {props.logInIcon ?<Box mx={2}> {props.logInIcon}</Box>  : ""}
-                                       
+                    <ListItem button>                      
+                        {props.logInIcon ?<Box mx={2}> {props.logInIcon}</Box>  : ""}                                       
                       <ListItemText primary={title} />
                     </ListItem>
                     </a>

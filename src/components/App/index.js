@@ -34,10 +34,13 @@ const myTheme = createMuiTheme({
   palette: {
     primary : {
       main: blue[200],
+     // contrastText: '#000',
+     // textColor: "#123123"
       
     },
     secondary: {
       main: cyan[500],
+     // contrastText: '#000',
       //dark: cyan[900]
     },
   },

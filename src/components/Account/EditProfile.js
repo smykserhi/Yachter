@@ -57,6 +57,7 @@ export default function EditProfile(props) {
   const [experiance, setExperiance] = React.useState(0);
   const [username, setUsername] = React.useState();
   const [captain, setCaptain] = React.useState(true);
+  const [setUp, setSetUp] = React.useState(true)
   // const experianceOnChange = (e)=>{
   //   setExperiance(e.target.value)
   //   //props.onChange(e)
@@ -83,10 +84,11 @@ export default function EditProfile(props) {
   }
   useEffect(() => {
     //console.log("props",props.requestParam && props.requestParam)
-    if(props.requestParam){
+    if(props.requestParam && setUp){
       setUsername(props.requestParam.username)
       setCaptain(props.requestParam.captain)
       setExperiance(props.requestParam.experiance)
+      setSetUp(false)
     }
     
   });

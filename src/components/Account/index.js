@@ -21,6 +21,10 @@ import TextField from '@material-ui/core/TextField';
 import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 import IconButton from '@material-ui/core/IconButton';
 import Alert from '@material-ui/lab/Alert';
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
+
+
 
 const borderProps = {
   //bgcolor: 'background.paper',
@@ -31,7 +35,7 @@ const borderProps = {
   
 };
 const GridWithBeckground = styled(Grid)({
-  backgroundColor: 'rgba(255, 255, 255, 0.4)',
+  backgroundColor: 'rgba(255, 255, 255, 0.7)',
   padding : "30px",
   borderRadius: "15px",
   marginTop: "25px",
@@ -60,7 +64,9 @@ class AccountPage extends Component {
     modalContent: "",
     openModalEditRequest : false,
     requestParam: null,    
-    alertEditPofile: null
+    alertEditPofile: null,
+    popUpAlert: false,
+    popUpAlertMessage: ""
 
 
   }
@@ -86,10 +92,11 @@ class AccountPage extends Component {
     //console.log("UsetId", this.state.userId)
     const userId= this.state.userId
     this.props.firebase.updateUserData(userId,data)
-    this.setState({ alertEditPofile: "Profile saved successfully"} )    
-    setTimeout(() => {
-      this.setState({alertEditPofile: null})
-    }, 2000);
+    this.setState({popUpAlert: true, popUpAlertMessage: "Profile saved successfully"})
+    // this.setState({ alertEditPofile: "Profile saved successfully"} )    
+    // setTimeout(() => {
+    //   this.setState({alertEditPofile: null})
+    // }, 2000);
 
   }
   // handlerResetPassword=()=>{
@@ -167,9 +174,9 @@ class AccountPage extends Component {
     this.setState({openModalEditRequest:true, requestParam: data})
   }
   handleSaveEditedRequest =(data)=>{
-    console.log("Save edited request",data)
+    //console.log("Save edited request",data)
     this.setState({openModalEditRequest:false})
-    console.log("Request params",this.state.requestParam)
+    //console.log("Request params",this.state.requestParam)
     //const [userId, myRequestId,captainId, captainRequestId,adminRequestId] = this.state.requestParam
     this.props.firebase.updateRequestData(
           this.state.requestParam.userId, 
@@ -191,12 +198,13 @@ class AccountPage extends Component {
   handleConfirmDeleteMessage=()=>{
     this.setState({modalOpen: false, requestParam : null} )
     this.props.firebase.deleteMessageFromUser(this.state.userId, this.state.requestParam)
+    this.setState({popUpAlert: true, popUpAlertMessage: "Message was deleted"})
     
     console.log("Delete message")
   }
   //delete confirmed
   yesDeleteHandler = ()=>{
-    console.log("Yes Delete" , this.state.requestParam)
+    //console.log("Yes Delete" , this.state.requestParam)
     this.setState({modalOpen: false})
     this.props.firebase.deleteRequestData(
       this.state.requestParam.userId, 
@@ -217,17 +225,24 @@ class AccountPage extends Component {
     const sendTo = this.state.requestParam.senderUid
     //console.log(this.state.user.username)
     //const sender = this.state.user.username  
-    this.setState({modalOpen: false, modalContent: null, requestParam: null} )
+    this.setState({modalOpen: false, modalContent: null, requestParam: null, popUpAlert: true, popUpAlertMessage: "Message sent"} )
     this.props.firebase.addMessageToUser(sendTo, {...this.state.requestParam, message})
   }
   saveNewTrip = (res) =>{
-    console.log("Response in modal",{...res, userId: this.state.userId})
+    //console.log("Response in modal",{...res, userId: this.state.userId})
     const newResponse = {...res, userId: this.state.userId}
     const cardPostId = this.props.firebase.addCard(newResponse)
     this.props.firebase.addCardToUser(this.state.userId, {...newResponse, cardPostId  })
     this.handleCloseModal()
 
   }
+  handleCloseAlert = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    this.setState({popUpAlert: false});
+  };
   
   render(){
     const {loading , user} = this.state
@@ -329,7 +344,10 @@ class AccountPage extends Component {
                                 <Trip  handleDelete={this.handleDeleteCard} handleEdit= {this.handleEditCard} cardId={key} editMode={true} card={user.myCards[key]}/>   
                               </Grid>
                             ) })
-                            : <h1>You doesn't have any posted trips ---</h1>
+                            : <Typography variant="h5" gutterBottom>
+                                  You doesn't have any posted trips 
+                                </Typography>                            
+                           
                         }                     
                       </GridWithBeckground>  
                     
@@ -359,7 +377,10 @@ class AccountPage extends Component {
                               <RequestTemplate handleResponse={this.handleResponse} adminMode={false} userRequsts={true} requestId={key} handleEdit={this.handleEditRequest} handleDelete={this.handleDeleteRequest} editMode={false} request = {user.requests[key]}/>
                             </Grid>
                           ) })
-                          : <h1>You doesn't have any trip requests  ---</h1>
+                          : <Typography variant="h5" gutterBottom>
+                                You doesn't have any trip requests
+                              </Typography>  
+                      
                       }                     
                     </GridWithBeckground>  
                     </>
@@ -381,7 +402,9 @@ class AccountPage extends Component {
                               <RequestTemplate adminMode={false} userRequsts={false}  requestId={key} handleEdit={this.handleEditRequest} handleDelete={this.handleDeleteRequest} editMode={true} request = {user.myRequests[key]}/>
                             </Grid>
                           ) })
-                          : <h1>You doesn't have any trip requests  ---</h1>
+                          : <Typography variant="h5" gutterBottom>
+                              You doesn't have any trip requests
+                            </Typography>                          
                       }                     
                     </GridWithBeckground>  
                     <Box  border={1} borderColor="text.primary" {...borderProps} /> 
@@ -407,8 +430,13 @@ class AccountPage extends Component {
                           
                            
 
-                  
+                        <Snackbar open={this.state.popUpAlert} autoHideDuration={3000} onClose={this.handleCloseAlert} >
+                            <MuiAlert elevation={6} variant="filled"  severity="success" onClose={this.handleCloseAlert}>
+                                {this.state.popUpAlertMessage}
+                              </MuiAlert>
+                        </Snackbar>
                 </Grid>
+                
               }
               <ModalForm saveNewTrip={this.saveNewTrip} 
                         firebase={this.props.firebase} 
@@ -428,7 +456,8 @@ class AccountPage extends Component {
                                                     requestParam={this.state.requestParam} 
                                                     open={this.state.openModalEditRequest} 
                                                     onClose={this.handleCloseModal} 
-                                                    onSubmit={this.handleSaveEditedRequest}/> : "" }    
+                                                    onSubmit={this.handleSaveEditedRequest}/> : "" }   
+
             </div>     
           
     );

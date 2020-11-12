@@ -17,6 +17,11 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 //import Alert from "../Alert"
+import { createMuiTheme, ThemeProvider,responsiveFontSizes } from '@material-ui/core/styles';
+
+
+let theme = createMuiTheme();
+theme = responsiveFontSizes(theme);
 
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -174,9 +179,12 @@ class LandingPage extends Component {
           minHeight="30vh" 
           component="span" 
           m={1}>
-            <Typography variant="h1" component="h2">
-            {card.title}
-            </Typography>
+          <ThemeProvider  theme={theme}>
+            <Typography align="center" variant="h2" component="h2">
+             {card.title}
+            </Typography> 
+          </ThemeProvider>
+            
         </Box>
         <MyBox   m={1}>
           <BoxInGrid>
@@ -197,9 +205,11 @@ class LandingPage extends Component {
         <MyBox  align="center">
           <Box width={{md:"95%" , xs:"95%"}}>
             <Box mb={3}>
-              <Typography m={5} variant="h2" component="h2">
-                Days Description
-              </Typography>
+              <ThemeProvider  theme={theme}>
+                <Typography m={5} variant="h2" component="h2">
+                    Days Description
+                </Typography>
+              </ThemeProvider>              
             </Box>            
             <HorisontalStepper card={card}/>
           </Box>          
@@ -208,9 +218,12 @@ class LandingPage extends Component {
         <MyBox  align="center">
           <Box borderRadius={16} width={{md:"95%" , xs:"95%"}}>  
             <Box mb={3}>
+              <ThemeProvider  theme={theme}>
                 <Typography m={5} variant="h2" component="h2">
-                  Yatch Photos
+                    Yatch Photos
                 </Typography>
+              </ThemeProvider>
+                
             </Box>          
               <Galery card={card} />             
           </Box>  

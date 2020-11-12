@@ -20,7 +20,7 @@ import CheckIcon from '@material-ui/icons/Check';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import * as ROUTES from '../../constants/routes';
 import withFirebase from "../Firebase"
-import { ContactlessOutlined, ContactMailOutlined } from '@material-ui/icons';
+import { ContactlessOutlined, ContactMailOutlined, NightsStayOutlined } from '@material-ui/icons';
 import { AuthUserContext, withAuthorization } from '../Session';
 import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 import Alert from '@material-ui/lab/Alert';
@@ -106,25 +106,34 @@ const useStyles = makeStyles((theme) => ({
 const AddTripTemplate= (props)=> {
     const userId = props.match.params.userId
     const postId = props.match.params.postId
-    const dayDisTemplate = {dayDis: null, imgUrl: null }
+    const dayDisTemplate = {dayDis: "", imgUrl: null }
     //const yathPhotoTemplate = {dayDis: null, imgUrl: null }
     let tempArr=[]
   const classes = useStyles();
-  const [shipName, setShipName] = React.useState();
+  const [shipName, setShipName] = React.useState("");
   const [passangers, setPassangers] = React.useState(1);
-  const [startDate, setStartDate] = React.useState();
-  const [endDate, setEndDate] = React.useState();
-  const [portDeparture, setPortDeparture] = React.useState();
+  const [startDate, setStartDate] = React.useState("");
+  const [endDate, setEndDate] = React.useState("");
+  const [portDeparture, setPortDeparture] = React.useState("");
   const [portOfArival, setPortOfArival] = React.useState();
   const [tripDesacription, setTripDesacription] = React.useState();
   const [title, setTitle] = React.useState();
   const [fee, setFee] = React.useState(0);
-  const [mainImgUrl, setMainImgUrl] = React.useState(null);
-  const [progress, setProgress] = React.useState(0);
+  const [mainImgUrl, setMainImgUrl] = React.useState(null);  
   const [daysDis, setDaysDis] = React.useState([dayDisTemplate]);
   const [yatchPhoto, setYatchPhoto] = React.useState([null]);
   const [message , setMessage] = React.useState(null)
-
+  const [progress, setProgress] = React.useState(0)
+   //let progress=0;
+   const dayDisValidator = ()=> {
+       let res
+       daysDis.map(el=>{
+            if(el.dayDis !== "" && el.imgUrl !== null) res = true
+            else res = false
+       })
+       return res
+   }
+  const validation = shipName !== "" &&  startDate !== ""&& endDate !== "" && portDeparture !== "" && title !== "" && mainImgUrl !== null && yatchPhoto !== null && dayDisValidator()
   //function recive image and function where save image url
  const saveImage=(img, func, arr=null, index=null)=>{
     //tempArr = [yathPhotoTemplate]
@@ -141,8 +150,9 @@ const AddTripTemplate= (props)=> {
             upLoadTask.on(
               "state_changed",
               snapshot =>{
-                  let progress = Math.round((snapshot.bytesTransferred/snapshot.totalBytes)*100)                  
-                  setProgress(progress)
+                  let prog = Math.round((snapshot.bytesTransferred/snapshot.totalBytes)*100)                  
+                  setProgress(prog)
+                  //console.log("prog", prog)
               },
               error =>{
                   console.log(error)
@@ -155,6 +165,7 @@ const AddTripTemplate= (props)=> {
                 .then(url=>{
                     
                     //console.log("element", el, "arr", tempArr.length, imgArr.length)
+                    //setProgress(0)
                     if(arr !== null ){  
                         
                         //arr it's dayDis arr and index tcken from input id     
@@ -164,12 +175,12 @@ const AddTripTemplate= (props)=> {
                             func([...arr])
                         }                                              
                         else {
-                            console.log("el", el, "url",url)
+                            //console.log("el", el, "url",url)
                             tempArr[el]= url 
-                            console.log("data", tempArr[el]) 
-                            console.log("Save" , tempArr)
+                            //console.log("data", tempArr[el]) 
+                            //console.log("Save" , tempArr)
                             func(tempArr)  
-                            console.log(yatchPhoto)                        
+                            //console.log(yatchPhoto)                        
                             
                         }
                         if(imgArr.length-1 === el){
@@ -214,6 +225,7 @@ const AddTripTemplate= (props)=> {
   }
   const handleAddImage =(e)=>{
     //console.log(e.target.name)
+    setProgress(10)
     if(e.target.name === "mainImage") saveImage(e.target.files, setMainImgUrl)
     else if(e.target.name === "yatchPhoto") saveImage(e.target.files, setYatchPhoto, yatchPhoto )
     else { saveImage(e.target.files, setDaysDis, daysDis, e.target.name )
@@ -271,6 +283,7 @@ const AddTripTemplate= (props)=> {
   const handleCancel=()=>{
     props.history.push(ROUTES.ACCOUNT)  
   }
+  //console.log("Validation", validation, dayDisValidator())
   return (
     <div className={classes.root}>
       <Grid container direction="column"  justify="center"  alignItems="center" spacing={3}>
@@ -286,6 +299,7 @@ const AddTripTemplate= (props)=> {
                     id="outlined-full-width1"
                     label="Title"
                     name="Title"
+                    required={true}
                     style={{ margin: 8 }}
                     //placeholder="Ship name"
                     //helperText="Full width!"
@@ -305,7 +319,7 @@ const AddTripTemplate= (props)=> {
                     name="Fee"
                     type="number"
                     style={{ margin: 8 }}
-                    
+                    required={true}
                     //placeholder="Ship name"
                     //helperText="Full width!"
                     defaultValue={fee}
@@ -323,6 +337,7 @@ const AddTripTemplate= (props)=> {
                     label="Ship name"
                     name="Ship name"
                     style={{ margin: 8 }}
+                    required={true}
                     //placeholder="Ship name"
                     //helperText="Full width!"
                     defaultValue={shipName}
@@ -344,6 +359,7 @@ const AddTripTemplate= (props)=> {
                         value={passangers}
                         onChange={onchangeHandler}
                         label="Passgers"
+                        required={true}
                         //defaultValue={shipName}
                         >
                     <MenuItem value={1}>1 </MenuItem>
@@ -362,6 +378,7 @@ const AddTripTemplate= (props)=> {
                     //placeholder="Ship name"
                     //helperText="Full width!"
                     fullWidth
+                    required={true}
                     //margin="normal"
                     defaultValue={startDate}
                     onChange={onchangeHandler}
@@ -381,6 +398,7 @@ const AddTripTemplate= (props)=> {
                     //placeholder="Ship name"
                     //helperText="Full width!"
                     fullWidth
+                    required={true}
                     //margin="normal"
                     defaultValue={endDate}
                     onChange={onchangeHandler}
@@ -398,6 +416,7 @@ const AddTripTemplate= (props)=> {
                     style={{ margin: 8 }}
                     //placeholder="Ship name"
                     //helperText="Full width!"
+                    required={true}
                     fullWidth
                     //margin="normal"
                     defaultValue={portDeparture}
@@ -415,6 +434,7 @@ const AddTripTemplate= (props)=> {
                     style={{ margin: 8 }}
                     //placeholder="Ship name"
                     //helperText="Full width!"
+                    required={true}
                     fullWidth
                     //margin="normal"
                     defaultValue={portOfArival}
@@ -431,6 +451,7 @@ const AddTripTemplate= (props)=> {
                     name= "Trip description"
                     style={{ margin: 8 }}
                     multiline={true}
+                    required={true}
                     rows="2"
                     //placeholder="Ship name"
                     //helperText="Full width!"
@@ -539,10 +560,10 @@ const AddTripTemplate= (props)=> {
                 </label>                          
         </Grid>  
           {message && message !== null ?  <Alert severity={message}>Trip saved successfully</Alert> : ""}
-         {progress>0 && progress<100 ? "" 
-            : <Grid container alignItems="center" justify="center" item xs={10} spacing={3}>
+         
+          <Grid container alignItems="center" justify="center" item xs={10} spacing={3}>
                 <Grid item container justify="center" alignItems="center" xs={6} >
-                    <Button fullWidth={true} onClick={handleOnSave} variant="contained" color="secondary">
+                    <Button type="submit" disabled={!validation} fullWidth={true} onClick={handleOnSave} variant="contained" color="secondary">
                             Save trip
                     </Button>
                 </Grid>
@@ -552,8 +573,8 @@ const AddTripTemplate= (props)=> {
                     </Button>
                 </Grid>        
                 
-            </Grid> } 
-            <BorderLinearProgress variant="determinate" value={progress} /> 
+            </Grid> 
+            {/* <BorderLinearProgress variant="determinate" value={50} />  */}
          
        
       </Grid>
