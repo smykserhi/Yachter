@@ -22,9 +22,9 @@ export default function Footer() {
 
   return (
     <BottomNavigation color="secondary" value={value} onChange={handleChange} className={classes.root}>     
-      <BottomNavigationAction target="_blank" href="https://www.facebook.com/" rel="noopener" label="Facebook" value="Facebook" icon={<FacebookIcon  />} />
-      <BottomNavigationAction target="_blank" href="https://www.instagram.com/" label="Instagram" value="Instagram" icon={<InstagramIcon />} />
-      <BottomNavigationAction target="_blank" href="https://twitter.com/" label="Twitter" value="Twitter" icon={<TwitterIcon />} />
+      <BottomNavigationAction target="_blank" href="https://www.facebook.com/" rel="noopener" label="Facebook" value="Facebook" icon={<FacebookIcon fontSize="large" />} />
+      <BottomNavigationAction target="_blank" href="https://www.instagram.com/" label="Instagram" value="Instagram" icon={<InstagramIcon fontSize="large"/>} />
+      <BottomNavigationAction target="_blank" href="https://twitter.com/" label="Twitter" value="Twitter" icon={<TwitterIcon fontSize="large"/>} />
     </BottomNavigation>
   );
 }

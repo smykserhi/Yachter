@@ -181,6 +181,7 @@ class LandingPage extends Component {
             <Galery card={card} />             
           </Box>
         </MyBox> 
+        <Box  minHeight="15vh"/>  
         <MyBox  align="center">
           <SendRequesrButton onClick={()=>this.handleSend()} variant="contained" color="primary">
               Send Request
