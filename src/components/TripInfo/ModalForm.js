@@ -49,7 +49,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function ModalForm(props) {
   const classes = useStyles();
-  const ages = new Array()
+  const ages = []
   for(let i=21; i<100;i++) ages.push(i)
   
   return (

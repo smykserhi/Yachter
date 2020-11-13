@@ -41,7 +41,7 @@ const myTheme = createMuiTheme({
 const App = () => {
   const classes = useStyles();  
   return(
-    <Router>
+    <Router >
       <ThemeProvider theme={myTheme}>       
             <Box className = {classes.mainGrid}>
               <Navigation  />  
