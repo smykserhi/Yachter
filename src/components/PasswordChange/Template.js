@@ -9,9 +9,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 
 
-
-
-//coment
 const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: theme.spacing(8),
@@ -27,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.secondary.main,
   },
   form: {
-    width: '100%', // Fix IE 11 issue.
+    width: '100%', 
     marginTop: theme.spacing(1),
   },
   submit: {
@@ -37,7 +34,6 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Change(props) {
   const classes = useStyles();
-
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
@@ -57,8 +53,7 @@ export default function Change(props) {
             id="paswordOne"
             label="New pasword"
             name="passwordOne"
-            autoComplete="email"
-                
+            autoComplete="email"                
             type="password"
             onChange = {props.onChange}      
           />  
@@ -70,8 +65,7 @@ export default function Change(props) {
             id="paswordTwo"
             label="New Pasword one more time"
             name="passwordTwo"
-            autoComplete="paswordTwo"
-           
+            autoComplete="paswordTwo"           
             type="password"    
             onChange = {props.onChange}      
           />                          
@@ -84,8 +78,7 @@ export default function Change(props) {
             disabled={props.isInvalid}
           >
             Save pasword
-          </Button>
-          
+          </Button>          
         </form>
       </div>      
     </Container>

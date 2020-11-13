@@ -4,7 +4,6 @@ import Cards from "../Cards"
 import Box from '@material-ui/core/Box'
 import Typography from '@material-ui/core/Typography';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import { styled } from '@material-ui/core/styles';
 import { createMuiTheme, ThemeProvider,responsiveFontSizes } from '@material-ui/core/styles';
 
 
@@ -21,11 +20,10 @@ class LandingPage extends Component {
     noTrips: false
   };
   componentDidMount() {
-
+    //connecting to firebase
     this.setState({ loading: true });    
     this.props.firebase.cards().on('value', snapshot => {
-      if(snapshot.val() !== null){
-        console.log(snapshot.val())
+      if(snapshot.val() !== null){        
         const usersObject = snapshot.val();      
         const usersList = Object.keys(usersObject).map(key => ({
           ...usersObject[key],
@@ -35,17 +33,14 @@ class LandingPage extends Component {
           cards: usersList,
           loading: false,        
         });
-      }else this.setState({noTrips : true, loading: false})
-      
-     
+      }else this.setState({noTrips : true, loading: false})    
     });
   }
   componentWillUnmount() {
     this.props.firebase.cards().off();    
   }
-  render(){
-    //console.log("cards lending", cards)
-    const { noTrips, cards, loading } = this.state; 
+  render(){    
+    const { noTrips, loading } = this.state; 
     return(
       <Box  my={5} display="flex"
         flexDirection="column"
@@ -57,16 +52,13 @@ class LandingPage extends Component {
             alignContent="center"  
             justifyContent="center"
             height={400}
-            //width="75%"
             fontWeight="fontWeightMedium">
               <ThemeProvider theme={theme}>
                 <Typography   align='center' variant="h2" component="h2" gutterBottom>
                     <Box color="#212121" fontWeight={300}>GET YOUR CHANCE TO EXTEND THE SUMMER!!!<br/><br/> YATCH TREVEL</Box>
                 </Typography>
-              </ThemeProvider>
-              
-        </Box>   
-        
+              </ThemeProvider>              
+        </Box>           
         {loading? <CircularProgress color="secondary" size={50} />: <Cards cards={this.state.cards}/>}  
         {noTrips ? 
           <ThemeProvider theme={theme}>
@@ -79,6 +71,5 @@ class LandingPage extends Component {
     )
   }
 }
-  
- //coment
+ 
 export default withFirebase(LandingPage);

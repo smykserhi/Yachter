@@ -6,7 +6,6 @@ import Forgot from "./Forgot"
 import { compose } from 'recompose';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
-//import Alert from "../Alert"
 
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -19,19 +18,14 @@ const PasswordForgetPage = () => (
 const INITIAL_STATE = {
   email: '',
   error: null,
-  open: false,
+  open: false,  
 };
  
 class PasswordForgetFormBase extends Component {
-  constructor(props) {
-    super(props);
- 
-    this.state = { ...INITIAL_STATE };
-  }
+  state = { ...INITIAL_STATE }; 
  
   onSubmit = event => {
-    const { email } = this.state;
- 
+    const { email } = this.state; 
     this.props.firebase
       .doPasswordReset(email)
       .then(() => {
@@ -43,8 +37,7 @@ class PasswordForgetFormBase extends Component {
       });
  
     event.preventDefault();
-  };
- 
+  }; 
   onChange = event => {
     this.setState({ [event.target.name]: event.target.value });
   };
@@ -52,33 +45,27 @@ class PasswordForgetFormBase extends Component {
     if (reason === 'clickaway') {
       return;
     }
-
     this.setState({open: false})
-  };
- 
+  }; 
   render() {
-    const { email, error } = this.state;
- 
-    const isInvalid = email === '';
- 
+    const { email, error } = this.state; 
+    const isInvalid = email === ''; 
     return (     
         <div>
-        <Forgot 
-          onChange = {this.onChange}
-          onSubmit = {this.onSubmit}
-          isInvalid = {isInvalid}
-        />
-         <Snackbar open={this.state.open} autoHideDuration={3000} onClose={this.handleClose}>
-            <Alert  onClose={this.handleClose} severity="warning">
-              {error && error.message}
-            </Alert>
-          </Snackbar>
-        {/*error && <p>{error.message}</p>*/}
+          <Forgot 
+            onChange = {this.onChange}
+            onSubmit = {this.onSubmit}
+            isInvalid = {isInvalid}
+          />
+          <Snackbar open={this.state.open} autoHideDuration={3000} onClose={this.handleClose}>
+              <Alert  onClose={this.handleClose} severity="warning">
+                {error && error.message}
+              </Alert>
+            </Snackbar>          
         </div>      
     );
   }
 }
- //coment
 const PasswordForgetLink = () => (
   <p>
     <Link to={ROUTES.PASSWORD_FORGET}>Forgot Password?</Link>

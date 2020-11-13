@@ -6,14 +6,12 @@ import PasswordChangeForm from '../PasswordChange';
 import EditProfile from "./EditProfile"
 import DeleteConfirmation from "./DeletConfirmation"
 import SendResponseToUser from "./SendResponseToUser"
-import AddTripTemplate from "./AddTripTemplate"
+import AddTripTemplate from "./AddTripTemplateEdit"
 
-
-//let myRef = React.createRef();
+//set modal position
 function getModalStyle() {
   const top = 50 
   const left = 50 
-
   return {
     top: `${top}%`,
     left: `${left}%`,
@@ -33,33 +31,19 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.down('sm')]: {
         width: "90vw",
       },
-      [theme.breakpoints.up('md')]: {
+    [theme.breakpoints.up('md')]: {
         width: "60vw",
-      },
-  
+    },  
   },
 }));
 
 export default function ModalForm( props) {
-  const classes = useStyles();
-  // getModalStyle is not a pure function, we roll the style only on the first render
+  const classes = useStyles();  
   const [modalStyle] = React.useState(getModalStyle);
-  // const [experiance, setExperiance] = React.useState(null);
-  // const [captain, setCaptain] = React.useState(null);
-  // const [username, setUsername] = React.useState(null);
   
-
-const onSubmitEdit=(data)=>{
-  //console.log(data)
-  props.onSubmit(data, "editProfile")
-}
-const deleteTempImage=(func) =>{
-  //console.log("Response in modal",res)
-  //console.log("my ref", func())
-  
-}
-
-
+  const onSubmitEdit=(data)=>{  
+    props.onSubmit(data, "editProfile")
+  }
   const body = (
     <div style={modalStyle} className={classes.paper}>
       {props.modalContent === "ChangePassword"? <PasswordChangeForm handleSaveNewPassword={props.handleSaveNewPassword}/>: ""}
@@ -69,23 +53,16 @@ const deleteTempImage=(func) =>{
       {props.modalContent === "Delete"? <DeleteConfirmation noDelete={props.handleCloseModal} yesDelete={props.yesDelete}/>: ""}
       {props.modalContent === "DeleteCard"? <DeleteConfirmation noDelete={props.handleCloseModal} yesDelete={props.handleDeleteCard} />: ""}
       {props.modalContent === "DeleteMessage"? <DeleteConfirmation noDelete={props.handleCloseModal} yesDelete={props.handleConfirmDeleteMessage}/>: ""}
-      {props.modalContent === "Response"? <SendResponseToUser send={props.sendResponse} cancel={props.handleCloseModal}/>: ""}
-      
+      {props.modalContent === "Response"? <SendResponseToUser send={props.sendResponse} cancel={props.handleCloseModal}/>: ""}      
     </div>
-  );
-  
+  );  
   return (
-    <div>
-      {/* <button type="button" onClick={handleOpen}>
-        Open Modal
-      </button> */}
+    <div>     
       <Modal 
-
         open={props.open}
         onClose={props.handleCloseModal}
         aria-labelledby="simple-modal-title"
-        aria-describedby="simple-modal-description"
-        //disableScrollLock={true}
+        aria-describedby="simple-modal-description"        
       >
         {body}
       </Modal>

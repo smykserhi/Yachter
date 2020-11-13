@@ -1,24 +1,19 @@
-import React,{useState} from 'react';
+import React from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import DirectionsBoatIcon from '@material-ui/icons/DirectionsBoat';
 import MenuItem from '@material-ui/core/MenuItem';
-import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import Select from '@material-ui/core/Select';
 import Switch from '@material-ui/core/Switch'
 import { Box } from '@material-ui/core';
-
-
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -28,24 +23,20 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "center",
     alignItems: 'center',
     backgroundColor: 'rgba(255, 255, 255, 0.9)',
-    //padding : "30px",
     borderRadius: "15px",
-    //overflow: "scroll"
-    //width: "85%"
   },
   avatar: {
     margin: theme.spacing(1),
     backgroundColor: theme.palette.secondary.main,
   },
   form: {
-    width: '100%', // Fix IE 11 issue.
+    width: '100%', 
     marginTop: theme.spacing(3),
   },
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
   formControl: {
-    //margin: theme.spacing(1),
     width: "100%",
   },
   switch:{
@@ -55,21 +46,12 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center"
   }
 }));
-const inputProps = {
-  //step: 300,
-  maxLength: 5
-  
-};
+
 export default function ModalForm(props) {
   const classes = useStyles();
   const ages = new Array()
   for(let i=21; i<100;i++) ages.push(i)
-  //console.log(age)
-  //const [age, setAge] = React.useState(21);
-  const handleOnChangeSelect = (e)=>{
-    //setAge(e.target.value)
-    props.onChange(e)
-  }
+  
   return (
     <Container mx={"auto"} component="span" >
       <CssBaseline />
@@ -105,8 +87,7 @@ export default function ModalForm(props) {
                 fullWidth
                 id="last_name"
                 label="Last Name"
-                value={props.last_name}  
-                //autoFocus
+                value={props.last_name} 
                 onChange={props.onChange}
               />
             </Grid>    
@@ -119,8 +100,7 @@ export default function ModalForm(props) {
                 fullWidth
                 id="address"
                 label="Address"
-                value={props.address}  
-                //autoFocus
+                value={props.address} 
                 onChange={props.onChange}
               />
             </Grid>
@@ -134,7 +114,6 @@ export default function ModalForm(props) {
                 id="city"
                 label="City"
                 value={props.city} 
-                //autoFocus
                 onChange={props.onChange}
               />
             </Grid>  
@@ -149,12 +128,9 @@ export default function ModalForm(props) {
                 id="zip_code"
                 label="Zip code"
                 value={props.zip_code} 
-                //maxLength={3}
-                //inputProps={{ maxLength: 3 }}
                 onInput = {(e) =>{
-                    e.target.value = Math.max(0, parseInt(e.target.value) ).toString().slice(0,5)
+                    e.target.value = Math.max(0, parseInt(e.target.value) ).toString().slice(0,5) //max length 5 
                 }}
-                //inputProps={inputProps}
                 onChange={props.onChange}
               />
             </Grid>   
@@ -167,13 +143,12 @@ export default function ModalForm(props) {
                   value={props.age}
                   name="age"
                   type="number"
-                  onChange={handleOnChangeSelect}
+                  onChange={props.onChange}
                   label="Age"
                   >
                   {ages.map(el =>(<MenuItem key={el} value={el}>{el}</MenuItem>))}                  
                 </Select>
               </FormControl>
-
             </Grid> 
             <Grid item  md={6} sm={12}>
               <Box className={classes.switch}>
@@ -185,8 +160,7 @@ export default function ModalForm(props) {
                     name="share_data"
                     inputProps={{ 'aria-label': 'secondary checkbox' }}
                 />
-              </Box>
-              
+              </Box>              
               <Box className={classes.switch}>
                 <Typography variant="subtitle2" component="label"> I want help captain in that trip</Typography>
                 <Switch
@@ -228,19 +202,33 @@ export default function ModalForm(props) {
                 autoComplete="email"
                 onChange={props.onChange}
               />
-            </Grid>
-                  
+            </Grid>                  
           </Grid>
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-            disabled={props.isInvalid}
-          >
-            Send Request
-          </Button>          
+          <Grid container spacing={1}>
+            <Grid item md={6} xs={11}>
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                color="primary"
+                className={classes.submit}
+                disabled={props.isInvalid}
+                >
+                Send Request
+              </Button> 
+            </Grid>
+            <Grid item md={6} xs={11}>
+              <Button
+                onClick={props.onClose}
+                fullWidth
+                variant="contained"
+                color="primary"
+                className={classes.submit}                
+                >
+                Close
+            </Button> 
+            </Grid>
+          </Grid> 
         </form>
       </div>      
     </Container>

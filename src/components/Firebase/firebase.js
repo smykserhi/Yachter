@@ -228,12 +228,6 @@ class Firebase {
           console.log(" Data admin card Delete successfully!")        
         }})
 
-    }
-
-
-
-    
-  }
-   
-  
+    }    
+  }  
   export default Firebase;

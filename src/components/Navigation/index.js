@@ -3,40 +3,23 @@ import * as ROUTES from '../../constants/routes';
 import SignOutButton from '../SignOut';
 import { AuthUserContext } from '../Session';
 import NavAutorised from "./NavAutorised"
-//import PersonOutlineIcon from '@material-ui/icons/PersonOutline';
 import PersonIcon from '@material-ui/icons/Person';
-import {AppConsumer} from "../AppContext"
-import { makeStyles, useTheme } from '@material-ui/core/styles';
-const useStyles = makeStyles((theme) => ({
-  root:{
-    //backgroundColor: 'rgba(255, 255, 255, 0.4)'
-  }
-}))
-const Navigation = (props) =>{
-  const classes = useStyles();
-  return (
-  <AppConsumer>
-    {consumer =>(
+
+
+const Navigation = () =>{  
+  return (  
       <AuthUserContext.Consumer>
-      {authUser =>       
-        authUser ? <NavigationAuth  className={classes.root}  /> : <NavigationNonAuth className={classes.root}  />      
-            
-      }
-    </AuthUserContext.Consumer>
-    )}    
-   
-  </AppConsumer>
+        {authUser =>       
+          authUser ? <NavigationAuth   /> : <NavigationNonAuth  />                  
+        }
+      </AuthUserContext.Consumer>  
 );}
  
-const NavigationAuth = (props) => {
-  //console.log("AppData",props.consumer.data)
+const NavigationAuth = () => {
   return( 
     <NavAutorised  links={[
-         { title: `Main`, path: ROUTES.MAIN },
-        //{ title: `home`, path: ROUTES.HOME },
-        { title: `account`, path: ROUTES.ACCOUNT },
-        //{ title: `admin`, path: ROUTES.ADMIN },
-        
+        { title: `Main`, path: ROUTES.MAIN },        
+        { title: `account`, path: ROUTES.ACCOUNT },        
         ]}
         button ={<SignOutButton />}
         personIcon ={<PersonIcon/>}
@@ -44,13 +27,11 @@ const NavigationAuth = (props) => {
   );
 }
  //coment
-const NavigationNonAuth = (props) => (
-  <NavAutorised links={[
-    // { title: `Main`, path: ROUTES.MAIN },
+const NavigationNonAuth = () => (
+  <NavAutorised links={[    
     { title: `Sign In`, path: ROUTES.SIGN_IN },       
     ]}
-    logInIcon ={<PersonIcon fontSize="large"/>}
-    
+    logInIcon ={<PersonIcon fontSize="large"/>}    
   /> 
 );
  

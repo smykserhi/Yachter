@@ -3,7 +3,6 @@ import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
@@ -16,7 +15,7 @@ import { Box } from '@material-ui/core';
 import FormControl from '@material-ui/core/FormControl';
 import MenuItem from '@material-ui/core/MenuItem';
 
-const experianceArr = new Array()
+const experianceArr = []
   for(let i=0; i<11;i++) experianceArr.push(i)
 
 const useStyles = makeStyles((theme) => ({
@@ -34,11 +33,10 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.secondary.main,
   },
   form: {
-    width: '100%', // Fix IE 11 issue.
+    width: '100%', 
     marginTop: theme.spacing(3),
   },
   formControl: {
-    //margin: theme.spacing(1),
     width: "100%",
   },
   submit: {
@@ -51,46 +49,32 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center"
   }
 }));
-
 export default function EditProfile(props) {
   const classes = useStyles();
   const [experiance, setExperiance] = React.useState(0);
   const [username, setUsername] = React.useState();
   const [captain, setCaptain] = React.useState(true);
   const [setUp, setSetUp] = React.useState(true)
-  // const experianceOnChange = (e)=>{
-  //   setExperiance(e.target.value)
-  //   //props.onChange(e)
-  //   //console.log("Set expriance to ", e.target.value)
-  // }
-  //console.log(props.user&& "Useer",props.user)
-  // const onChangeHandle=(e)=>{
-  //   if(e.target.id === "username" ) setUsername(e.target.value)
-  //   if(e.target.id === "captain" ) setCaptain(e.target.checked)
-
-  // }
+  //save input data to variable
   const onShangeHandler=(e) =>{
-    //props.onChange(e)
-    //console.log(e.target.name)
     if(e.target.name === "username") setUsername(e.target.value)
     else if(e.target.name === "experiance")  setExperiance(e.target.value)
     else if(e.target.name === "captain")  setCaptain(e.target.checked)
   }
+  //on submit create response and call props function
   const onSubmit =(e)=>{
-    const responce = {username, experiance, captain }
-    //console.log("responce obj", responce)
+    const responce = {username, experiance, captain }   
     props.onSubmit(responce)
     e.preventDefault()
   }
-  useEffect(() => {
-    //console.log("props",props.requestParam && props.requestParam)
-    if(props.requestParam && setUp){
+  // this function execute every time when component mount to page like componentDidMount
+  useEffect(() => {    
+    if(props.requestParam && setUp){ // if request patam exist and setUp 
       setUsername(props.requestParam.username)
       setCaptain(props.requestParam.captain)
       setExperiance(props.requestParam.experiance)
       setSetUp(false)
-    }
-    
+    }    
   });
   return (
     <Container component="main" maxWidth="xs">
@@ -106,7 +90,6 @@ export default function EditProfile(props) {
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <TextField
-                //sautoComplete="fname"
                 name="username"
                 variant="outlined"
                 required
@@ -126,25 +109,22 @@ export default function EditProfile(props) {
                   id="experiance"
                   value={experiance}
                   name="experiance"
-                  //type="number"
                   onChange={onShangeHandler}
-                  label="experiance"
-                  >
-                  {experianceArr.map(el =>(<MenuItem key={el} value={el}>{el}</MenuItem>))}  
-                  <MenuItem key={11} value="more then 10">More then 10 trips</MenuItem>                
+                  label="experiance">
+                    {experianceArr.map(el =>(<MenuItem key={el} value={el}>{el}</MenuItem>))}  
+                    <MenuItem key={11} value="more then 10">More then 10 trips</MenuItem>                
                 </Select>
               </FormControl>
-
             </Grid> 
             <Grid item xs={6}>
               <Box className={classes.switch}>
                 <Typography variant="subtitle2" component="label"> A'm captain</Typography>
                 <Switch
-                    checked={captain}
-                    id="captain"
-                    onChange={onShangeHandler}
-                    name="captain"
-                    inputProps={{ 'aria-label': 'secondary checkbox' }}
+                  checked={captain}
+                  id="captain"
+                  onChange={onShangeHandler}
+                  name="captain"
+                  inputProps={{ 'aria-label': 'secondary checkbox' }}
                 />
               </Box>     
             </Grid>     
@@ -154,10 +134,8 @@ export default function EditProfile(props) {
             fullWidth
             variant="contained"
             color="primary"
-            className={classes.submit}
-            //disabled={props.isInvalid}
-          >
-           Save changes
+            className={classes.submit}>
+            Save changes
           </Button>          
         </form>
       </div>      

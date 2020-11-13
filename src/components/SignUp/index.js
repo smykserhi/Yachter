@@ -6,14 +6,11 @@ import { withFirebase } from '../Firebase';
 import SignUpTemplate from "./Temolate"
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
-//import Alert from "../Alert"
 
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
 
-
-//coment
 const SignUpPage = () => (  
     <SignUpForm />      
 );
@@ -30,10 +27,7 @@ const INITIAL_STATE = {
 }; 
 
 class SignUpFormBase extends Component {
-  constructor(props) {
-    super(props);
-    this.state = { ...INITIAL_STATE };
-  }
+  state = { ...INITIAL_STATE };  
  
   onSubmit = event => {
     const {experiance, captain, username, email, passwordOne } = this.state;
@@ -61,8 +55,7 @@ class SignUpFormBase extends Component {
       })
       .catch(error => {
         this.setState({ error ,open: true});
-      });
- 
+      }); 
     event.preventDefault();
   }
  
@@ -74,20 +67,17 @@ class SignUpFormBase extends Component {
     if (reason === 'clickaway') {
       return;
     }
-
     this.setState({open: false})
   };
  
-  render() {
-    //unidirectional data flow of React thus, each input field gets a value from the local state and updates the value in the local state with a onChange handler. 
-    //The input fields are controlled by the local state of the component and don't control their own states.
+  render() {    
     const {
       username,
       email,
       passwordOne,
       passwordTwo,
       error,
-    } = this.state;
+      } = this.state;
     //set up validation for fields
     const isInvalid =
       passwordOne !== passwordTwo ||
@@ -96,20 +86,18 @@ class SignUpFormBase extends Component {
       username === '';
     return (     
         <div>
-        <SignUpTemplate 
-            onChange={this.onChange}
-            onSubmit={this.onSubmit}
-            isInvalid={isInvalid}
-            experiance = {this.state.experiance}
-            captain = {this.state.captain}
-
-          />
-          <Snackbar open={this.state.open} autoHideDuration={3000} onClose={this.handleClose}>
-            <Alert  onClose={this.handleClose} severity="warning">
-              {error && error.message}
-            </Alert>
-           </Snackbar>
-        {/*error && <p>{error.message}</p>*/}
+          <SignUpTemplate 
+              onChange={this.onChange}
+              onSubmit={this.onSubmit}
+              isInvalid={isInvalid}
+              experiance = {this.state.experiance}
+              captain = {this.state.captain}
+            />
+            <Snackbar open={this.state.open} autoHideDuration={3000} onClose={this.handleClose}>
+              <Alert  onClose={this.handleClose} severity="warning">
+                {error && error.message}
+              </Alert>
+            </Snackbar>          
         </div>      
     );
   }

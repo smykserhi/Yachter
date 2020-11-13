@@ -10,8 +10,6 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 
-
-//coment
 const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: theme.spacing(8),
@@ -20,16 +18,14 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     backgroundColor: 'rgba(255, 255, 255, 0.9)',
     padding : "30px",
-    borderRadius: "15px",
-    
-    
+    borderRadius: "15px", 
   },
   avatar: {
     margin: theme.spacing(1),
     backgroundColor: theme.palette.secondary.main,
   },
   form: {
-    width: '100%', // Fix IE 11 issue.
+    width: '100%', 
     marginTop: theme.spacing(1),
   },
   submit: {
@@ -39,7 +35,6 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SignInTemplate(props) {
   const classes = useStyles();
-
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />

@@ -15,14 +15,12 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import DirectionsBoatRoundedIcon from '@material-ui/icons/DirectionsBoatRounded';
 import SendRoundedIcon from '@material-ui/icons/SendRounded';
 import Button from '@material-ui/core/Button';
-import Box from "@material-ui/core/Box";
 import Grid from '@material-ui/core/Grid';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-   
+  root: {   
 
     //minWidth: "15vw",
     backgroundColor: 'rgba(255, 255, 255, 0.8)',

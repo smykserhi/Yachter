@@ -8,9 +8,6 @@ import MonetizationOnIcon from '@material-ui/icons/MonetizationOn';
 import DateRangeIcon from '@material-ui/icons/DateRange';
 import PersonPinCircleIcon from '@material-ui/icons/PersonPinCircle';
 import PinDropIcon from '@material-ui/icons/PinDrop';
-import ViewWeekIcon from '@material-ui/icons/ViewWeek';
-
-
 
 const BoxInGrid = styled(Box)({
     display:"flex",

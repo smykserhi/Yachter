@@ -9,8 +9,7 @@ const withAuthorization = condition => Component => {
   class WithAuthorization extends React.Component {
     componentDidMount() {
       this.listener = this.props.firebase.auth.onAuthStateChanged(
-        authUser => {
-            //console.log("props",authUser.uid)
+        authUser => {           
           if (!condition(authUser)) {
             this.props.history.push(ROUTES.SIGN_IN);
           }
@@ -32,7 +31,7 @@ const withAuthorization = condition => Component => {
       );
     }
   }
- //comet
+
   return compose(
     withRouter,
     withFirebase,

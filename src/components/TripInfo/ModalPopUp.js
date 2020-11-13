@@ -1,9 +1,7 @@
-import React,{useState,useEffect} from 'react';
+import React,{useEffect} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
 import ModalForm from "./ModalForm"
-
-
 
 function getModalStyle() {
   const top = 50 
@@ -48,8 +46,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function ModalPopUp( props) {
-  const classes = useStyles();
-  // getModalStyle is not a pure function, we roll the style only on the first render
+  const classes = useStyles();  
   const [modalStyle] = React.useState(getModalStyle);
   const [first_name, setFirst_name] = React.useState("");
   const [last_name, setLast_name] = React.useState("");
@@ -61,17 +58,10 @@ export default function ModalPopUp( props) {
   const [want_help, setWant_help] = React.useState(false);
   const [phone, setPhone] = React.useState("");
   const [email, setEmail] = React.useState("");
-  const [setUp, setSetUp] = React.useState(true)
-
+  const [setUp, setSetUp] = React.useState(true)  
   
-
-  const handleClose = () => {
-    //setOpen(false);
-    props.onClose()
-  };
-
+  //saveing data 
   const onChangeForm = (e)=>{
-    //console.log(e.target.name,"value ",e.target.checked)
     if(e.target.name === "first_name") setFirst_name(e.target.value)
     else if(e.target.name === "last_name") setLast_name(e.target.value)
     else if(e.target.name === "address") setAddress(e.target.value)
@@ -83,6 +73,7 @@ export default function ModalPopUp( props) {
     else if(e.target.name === "phone") setPhone(e.target.value)
     else if(e.target.name === "email") setEmail(e.target.value)
   }
+  //save request
   const onSubmitForm = (e) =>{
     e.preventDefault();
     const userData= {
@@ -97,16 +88,14 @@ export default function ModalPopUp( props) {
         phone,
         email
       }
-
+      //return data 
       props.onSubmit(userData)
-
-    //console.log("userData",userData)
-
   }
+
   useEffect(() => {
+    //called only when edit request clicked
     if(props.requestParam && setUp){
       const request = props.requestParam.request
-      //console.log(request)
       setFirst_name(request.first_name)
       setLast_name(request.last_name)
       setAddress(request.address)
@@ -118,37 +107,32 @@ export default function ModalPopUp( props) {
       setPhone(request.phone)
       setEmail(request.email)
       setSetUp(false)
-    }
-    
-    
+    }    
   });
-    //if(props.open && !open)setOpen(true)
   return (
     <div className={classes.container}>      
       <Modal
         open={props.open}
-        onClose={handleClose}
+        onClose={props.onClose}
         aria-labelledby="simple-modal-title"
         aria-describedby="simple-modal-description"
-      >
+        >
         <div style={modalStyle} className={classes.paper}>
-         
-            <ModalForm 
-                first_name={first_name}
-                last_name={last_name}
-                address={address}
-                city={city}
-                zip_code={zip_code}
-                age={age}
-                want_help={want_help} 
-                share_data={share_data} 
-                onChange={onChangeForm} 
-                onSubmit={onSubmitForm}
-                phone={phone}
-                email={email}
-                />      
-          
-          
+          <ModalForm 
+            first_name={first_name}
+            last_name={last_name}
+            address={address}
+            city={city}
+            zip_code={zip_code}
+            age={age}
+            want_help={want_help} 
+            share_data={share_data} 
+            onChange={onChangeForm} 
+            onSubmit={onSubmitForm}
+            phone={phone}
+            email={email}
+            onClose={props.onClose}
+            />    
         </div>
       </Modal>
     </div>

@@ -1,38 +1,28 @@
-import React, {useState, Component} from 'react';
-import { PasswordForgetForm } from '../PasswordForget';
-import PasswordChangeForm from '../PasswordChange';
-import { AuthUserContext, withAuthorization } from '../Session';
+import React, { Component} from 'react';
+import { withAuthorization } from '../Session';
 import Grid from '@material-ui/core/Grid';
 import { styled } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
-import { borders } from '@material-ui/system';
 import ModalForm from "./ModalForm"
 import Box from '@material-ui/core/Box';
 import Trip from "../Cards/Trip"
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import RequestTemplate from "./RequestsTemplate"
-import { makeStyles } from '@material-ui/core/styles';
 import ModalPopUp  from "../TripInfo/ModalPopUp"
-import { BrowserRouter as Router, Route } from 'react-router-dom';
-import * as ROUTES from '../../constants/routes';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import TextField from '@material-ui/core/TextField';
 import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 import IconButton from '@material-ui/core/IconButton';
-import Alert from '@material-ui/lab/Alert';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 
 
-
 const borderProps = {
-  //bgcolor: 'background.paper',
   mt: 5,
   border: 1,
   style: { width: '95%', height: '0px' },
-  height: 10,
-  
+  height: 10,  
 };
 const GridWithBeckground = styled(Grid)({
   backgroundColor: 'rgba(255, 255, 255, 0.7)',
@@ -40,9 +30,9 @@ const GridWithBeckground = styled(Grid)({
   borderRadius: "15px",
   marginTop: "25px",
   width: '95vw',
-    ['@media (min-width:780px)']: { // eslint-disable-line no-useless-computed-key
+  ['@media (min-width:780px)']: { 
       width: '70vw'
-    } 
+  } 
 });
 const AddButtonBox = styled(Box)({
   marginRight : "10vw",
@@ -67,11 +57,9 @@ class AccountPage extends Component {
     alertEditPofile: null,
     popUpAlert: false,
     popUpAlertMessage: ""
-
-
   }
-  componentDidMount() {
-    //this.props.firebase.updateData({captain: false})
+  componentDidMount() {    
+    //get data from firebase 
     this.setState({ loading: true, userId: this.props.id,}); 
     this.props.firebase.user(this.props.id).on('value', snapshot => {
       const userObject = snapshot.val();      
@@ -80,33 +68,20 @@ class AccountPage extends Component {
         loading: false,        
       });
     });
-    //console.log(this.state.user)
   }
+  //close firebase connection
   componentWillUnmount() {
     this.props.firebase.user().off();    
   }
 
   //update data in user profile
   editProfileSave=(data)=>{
-    //console.log("editProfileSave",data) 
-    //console.log("UsetId", this.state.userId)
     const userId= this.state.userId
     this.props.firebase.updateUserData(userId,data)
-    this.setState({popUpAlert: true, popUpAlertMessage: "Profile saved successfully"})
-    // this.setState({ alertEditPofile: "Profile saved successfully"} )    
-    // setTimeout(() => {
-    //   this.setState({alertEditPofile: null})
-    // }, 2000);
-
+    this.setState({popUpAlert: true, popUpAlertMessage: "Profile saved successfully"}) // open alert and set message   
   }
-  // handlerResetPassword=()=>{
-  //   this.setState({ alertEditPofile: "Request sent successfully"} )    
-  //   setTimeout(() => {
-  //     this.setState({alertEditPofile: null})
-  //   }, 2000);
-
-  // }
-  //----------Profile Handlers
+  
+  //----------Profile Handlers------
   //reset password button
   handleOnClickRessetPassword=(e)=>{
     this.setState({modalOpen: true, modalContent: "ResetPassword"})    
@@ -119,17 +94,13 @@ class AccountPage extends Component {
   handleOnClickChangePassword=(e)=>{
     this.setState({modalOpen: true, modalContent: "ChangePassword"})  
   }
-
   //Add trip button
-  handleOnClickAddTrip = () =>{
-    this.props.history.push(`/add-trip/${this.state.userId}`)
-    //this.setState({modalOpen: true, modalContent: "AddTrip"})
+  handleOnClickAddTrip = () =>{    
+    this.props.history.push(`/add-trip/${this.state.userId}`)    
   }
   //on close modal window
   handleCloseModal =()=>{
-    console.log("close modal")
-    this.setState({modalOpen: false,openModalEditRequest: false, requestParam: null})
-    
+    this.setState({modalOpen: false,openModalEditRequest: false, requestParam: null})    
   }
   //handle onSubmit edit profile
   handleSubmitModal=(data, element)=>{
@@ -139,45 +110,35 @@ class AccountPage extends Component {
 
 
   //--------Card handlers-------------
-  handleEditCard = (data) =>{
-    //console.log("EditCard", data)
+  handleEditCard = (data) =>{   
    this.setState({modalOpen: true, modalContent: "AddTrip", requestParam : data} ) 
   }
+
   //open modal confirmation
-  handleDeleteCard = (data) =>{
-    //console.log("DeleteCard", data)
+  handleDeleteCard = (data) =>{    
     this.setState({modalOpen: true, modalContent: "DeleteCard", requestParam : data} )  
   }
+
   //if delete confirmed
-  handleDeleteConfirmed =()=>{
-    //console.log("Confirmed delete card", this.state.requestParam)
+  handleDeleteConfirmed =()=>{    
     const data = this.state.requestParam
     this.props.firebase.deleteCardData(data.userId, data.cardId, data.cardPostId)
-    this.setState({modalOpen: false, modalContent: "", requestParam : null} ) 
+    this.setState({modalOpen: false, modalContent: "", requestParam : null, popUpAlert: true, popUpAlert: "Trip deleted successfully"} ) 
   }
 
 
   //------------Request handlers---------------
   //Save new password
   handleSaveNewPassword=()=>{
-    this.setState({modalOpen: false, alertEditPofile: "New password saved successfully"} )
-    console.log("New password save")
-    setTimeout(() => {
-      this.setState({alertEditPofile: null})
-    }, 2000);
-
-  }
+    this.setState({modalOpen: false, popUpAlert:true, popUpAlertMessage: "New password Saved"} )
+    }
+  //open modal for edit request
   handleEditRequest = (data) =>{
-    //console.log("Edit Request param", data)
-    //save edit request param to state
-    //then open modal
     this.setState({openModalEditRequest:true, requestParam: data})
   }
+  //save edited request
   handleSaveEditedRequest =(data)=>{
-    //console.log("Save edited request",data)
-    this.setState({openModalEditRequest:false})
-    //console.log("Request params",this.state.requestParam)
-    //const [userId, myRequestId,captainId, captainRequestId,adminRequestId] = this.state.requestParam
+    this.setState({openModalEditRequest:false, popUpAlertMessage: "Request saved", popUpAlert: true})
     this.props.firebase.updateRequestData(
           this.state.requestParam.userId, 
           this.state.requestParam.myRequestId ,
@@ -186,26 +147,21 @@ class AccountPage extends Component {
           this.state.requestParam.adminRequestId,
           data)
   }
-  //open modal confirmatio
-  handleDeleteRequest = (data) =>{
-    //console.log("Delete Request", data)
+  //open modal confirmation on delete request
+  handleDeleteRequest = (data) =>{    
     this.setState({modalOpen: true, modalContent: "Delete", requestParam : data} )
   }
+  //open confirmation on delete message
   handleDeleteMessage = (data) =>{
-    //console.log("Delete Request", data)
     this.setState({modalOpen: true, modalContent: "DeleteMessage", requestParam : data} )
   }
-  handleConfirmDeleteMessage=()=>{
-    this.setState({modalOpen: false, requestParam : null} )
-    this.props.firebase.deleteMessageFromUser(this.state.userId, this.state.requestParam)
-    this.setState({popUpAlert: true, popUpAlertMessage: "Message was deleted"})
-    
-    console.log("Delete message")
+  //delete message after confirmation
+  handleConfirmDeleteMessage=()=>{    
+    this.props.firebase.deleteMessageFromUser(this.state.userId, this.state.requestParam)    
+    this.setState({modalOpen: false, requestParam : null,popUpAlert: true, popUpAlertMessage: "Message deleted"} )
   }
-  //delete confirmed
-  yesDeleteHandler = ()=>{
-    //console.log("Yes Delete" , this.state.requestParam)
-    this.setState({modalOpen: false})
+  //delete request confirmed
+  yesDeleteHandler = ()=>{    
     this.props.firebase.deleteRequestData(
       this.state.requestParam.userId, 
       this.state.requestParam.myRequestId ,
@@ -213,122 +169,109 @@ class AccountPage extends Component {
       this.state.requestParam.captainRequestId,
       this.state.requestParam.adminRequestId    
       )
+    this.setState({modalOpen: false, popUpAlert: true, popUpAlertMessage: "Request deleted"})
   }
-  //Response to user modal open //NEED MODIFICATION
-  handleResponse=(data)=>{
-    //console.log("handle Response",data)
+  //Response to user modal open 
+  handleResponse=(data)=>{    
     this.setState({modalOpen: true, modalContent: "Response", requestParam: data} )
   }
-  //-------Need Modification----------------------------
+  //send message to user after send button in modal
   handleResponseSend=(message)=>{
-    //console.log("Send response to user", this.state.requestParam, "Message", message)
-    const sendTo = this.state.requestParam.senderUid
-    //console.log(this.state.user.username)
-    //const sender = this.state.user.username  
-    this.setState({modalOpen: false, modalContent: null, requestParam: null, popUpAlert: true, popUpAlertMessage: "Message sent"} )
+    const sendTo = this.state.requestParam.senderUid       
     this.props.firebase.addMessageToUser(sendTo, {...this.state.requestParam, message})
+    this.setState({modalOpen: false, modalContent: null, requestParam: null, popUpAlert: true, popUpAlertMessage: "Message sent"} )
   }
+  //save new trip
   saveNewTrip = (res) =>{
-    //console.log("Response in modal",{...res, userId: this.state.userId})
     const newResponse = {...res, userId: this.state.userId}
     const cardPostId = this.props.firebase.addCard(newResponse)
     this.props.firebase.addCardToUser(this.state.userId, {...newResponse, cardPostId  })
     this.handleCloseModal()
-
+    this.setState({popUpAlert: true, popUpAlertMessage: "New trip added"})
   }
+  //close alert 
   handleCloseAlert = (event, reason) => {
     if (reason === 'clickaway') {
       return;
     }
-
     this.setState({popUpAlert: false});
-  };
-  
+  };  
   render(){
-    const {loading , user} = this.state
-    //console.log("User", user)
+    const {loading , user} = this.state   
     return(                            
             <div>
               {loading ? <CircularProgress color="secondary" /> : 
                 <Grid  container direction="column" justify="space-around" alignItems="center" spacing={3}>                  
                   <Grid  style={{ marginTop: "25px"}} item  xs={12}>
-                        <Typography variant="h4" gutterBottom>
-                          Profile info
-                        </Typography>
-                        {this.state.alertEditPofile !== null ?<Alert severity="success">{this.state.alertEditPofile}</Alert>: ""}
-                      </Grid>
-                    <GridWithBeckground  item  container  direction="row"  justify="center" alignItems="center" >                      
-                      <Grid container   justify="center"  item xs={12} md={6}>
-                        <Typography variant="h5" gutterBottom>
-                          Name: {user && user.username}
-                        </Typography>                        
-                      </Grid>
-                      <Grid container  justify="center" item xs={12} md={6}>
-                        <Typography variant="h5" gutterBottom>
-                            Email: {user && user.email}
-                        </Typography>    
-                      </Grid>
-                      <Grid container justify="center" alignItems="stretch" item xs={12} md={4}>
-                        <Button style={{width:"100%", margin: "5px"}} id="editProfileModal" variant="contained" color="primary"onClick={this.handleOnClickEditProfile}>
-                          Edit profile
-                        </Button> 
-                      </Grid>
-                      <Grid container   justify="center" item xs={12} md={4}>
-                        <Button style={{width:"100%" , margin: "5px"}} id="changePasswordModal" variant="contained" color="primary" onClick={this.handleOnClickChangePassword}>
-                          Change password
-                        </Button> 
-                      </Grid>
-                      <Grid container  justify="center" item xs={12} md={4}>
-                        <Button  style={{width:"100%" , margin: "5px"}} id="resetPasswordModal" variant="contained" color="primary" onClick={this.handleOnClickRessetPassword}>
-                          Reset password
-                        </Button>    
-                      </Grid>
-                    </GridWithBeckground>
-                    <Box  border={1} borderColor="text.primary" {...borderProps} /> 
-                    <Grid item>
-                          <Typography variant="h4" gutterBottom>
-                            Messages
-                          </Typography>
+                    <Typography variant="h4" gutterBottom>
+                      Profile info
+                    </Typography>                        
+                  </Grid>
+                  <GridWithBeckground  item  container  direction="row"  justify="center" alignItems="center" >                      
+                    <Grid container   justify="center"  item xs={12} md={6}>
+                      <Typography variant="h5" gutterBottom>
+                        Name: {user && user.username}
+                      </Typography>                        
+                    </Grid>
+                    <Grid container  justify="center" item xs={12} md={6}>
+                      <Typography variant="h5" gutterBottom>
+                        Email: {user && user.email}
+                      </Typography>    
+                    </Grid>
+                    <Grid container justify="center" alignItems="stretch" item xs={12} md={4}>
+                      <Button style={{width:"100%", margin: "5px"}} id="editProfileModal" variant="contained" color="primary"onClick={this.handleOnClickEditProfile}>
+                        Edit profile
+                      </Button> 
+                    </Grid>
+                    <Grid container   justify="center" item xs={12} md={4}>
+                      <Button style={{width:"100%" , margin: "5px"}} id="changePasswordModal" variant="contained" color="primary" onClick={this.handleOnClickChangePassword}>
+                        Change password
+                      </Button> 
+                    </Grid>
+                    <Grid container  justify="center" item xs={12} md={4}>
+                      <Button  style={{width:"100%" , margin: "5px"}} id="resetPasswordModal" variant="contained" color="primary" onClick={this.handleOnClickRessetPassword}>
+                        Reset password
+                      </Button>    
+                    </Grid>
+                  </GridWithBeckground>
+                  <Box  border={1} borderColor="text.primary" {...borderProps} /> 
+                  <Grid item>
+                    <Typography variant="h4" gutterBottom>
+                      Messages
+                    </Typography>
+                  </Grid> 
+                  <GridWithBeckground item container spacing={3}  direction="row"  justify="center"  alignItems="center"> 
+                    {user && user.messages  ? Object.keys(user.messages).map(key =>{
+                      return(
+                        <Grid container key={key} direction="row"  justify="flex-start" item xs={12} >  
+                          <Grid  item xs={10}>
+                            <TextField
+                              fullWidth={true}
+                              id={key}
+                              label="Message "
+                              disabled={true}
+                              defaultValue={user.messages[key].message}
+                              variant="outlined"
+                              />
                           </Grid> 
-                      <GridWithBeckground item container spacing={3}  direction="row"  justify="center"  alignItems="center">                        
-                       
-                        {
-                          user && user.messages  ? Object.keys(user.messages).map(key =>{
-                            return(
-                              <Grid container key={key} direction="row"  justify="flex-start" item xs={12} >  
-                                <Grid  item xs={10}>
-                                  <TextField
-                                    fullWidth={true}
-                                    id={key}
-                                    label="Message "
-                                    disabled={true}
-                                    defaultValue={user.messages[key].message}
-                                    //helperText="Message"
-                                    variant="outlined"
-                                  />
-                                </Grid> 
-                                <Grid  item xs={2}>
-                                  <label onClick={()=>{this.handleDeleteMessage(key)}}>
-                                      <IconButton color="primary"   aria-label="upload picture" component="span">
-                                              <HighlightOffIcon  color="error" fontSize="large" />   
-                                      </IconButton> 
-                                  </label>
-                                </Grid>                                
-                               
-                             </Grid>
+                          <Grid  item xs={2}>
+                            <label onClick={()=>{this.handleDeleteMessage(key)}}>
+                              <IconButton color="primary"   aria-label="upload picture" component="span">
+                                <HighlightOffIcon  color="error" fontSize="large" />   
+                              </IconButton> 
+                            </label>
+                          </Grid> 
+                        </Grid>
                               
-                            ) })
-                            : <Grid container  justify="center" item xs={12}>
-                                <Typography variant="h5" gutterBottom>
-                                    You doesn't have any messages
-                                </Typography>
-                              </Grid>
-                            
-                        }
-                                                                         
-                      </GridWithBeckground>  
-                      
-                    {user && user.role !== "user"  ? //if user role "NOT user"
+                      ) })
+                      : <Grid container  justify="center" item xs={12}>
+                          <Typography variant="h5" gutterBottom>
+                            You doesn't have any messages
+                          </Typography>
+                        </Grid>
+                    }                                                 
+                  </GridWithBeckground> 
+                  {user && user.role !== "user"  ? //if user role "NOT user"
                     <>
                       <Box  border={1} borderColor="text.primary" {...borderProps} />   
                       <Grid style={{ marginTop: "25px"}}item>
@@ -337,104 +280,91 @@ class AccountPage extends Component {
                         </Typography>
                       </Grid> 
                       <GridWithBeckground item container  direction="row"  justify="center"  alignItems="center" wrap="wrap" spacing={5}>
-                        {
-                          user && user.myCards  ? Object.keys(user.myCards).map(key =>{
-                            return(
-                              <Grid container key={key} justify="center" item xs={12} md={6} lg={4} >
-                                <Trip  handleDelete={this.handleDeleteCard} handleEdit= {this.handleEditCard} cardId={key} editMode={true} card={user.myCards[key]}/>   
-                              </Grid>
+                        {user && user.myCards  ? Object.keys(user.myCards).map(key =>{
+                          return(
+                            <Grid container key={key} justify="center" item xs={12} md={6} lg={4} >
+                              <Trip  handleDelete={this.handleDeleteCard} handleEdit= {this.handleEditCard} cardId={key} editMode={true} card={user.myCards[key]}/>   
+                            </Grid>
                             ) })
-                            : <Typography variant="h5" gutterBottom>
-                                  You doesn't have any posted trips 
-                                </Typography>                            
-                           
+                          : 
+                            <Typography variant="h5" gutterBottom>
+                              You doesn't have any posted trips 
+                            </Typography> 
+                        }                     
+                      </GridWithBeckground>                     
+                      <Grid style={{ marginTop: "35px"}} item container  direction="row" justify="flex-end">
+                        {user && user.captain 
+                          ? 
+                            <AddButtonBox >
+                              <Typography style={{ margin: "15px"}} variant="h5" >
+                                Add trip
+                              </Typography>
+                              <AddCircleIcon onClick={this.handleOnClickAddTrip}  fontSize="inherit" color="primary"/>
+                            </AddButtonBox>  
+                          : ""}                                            
+                      </Grid>      
+                      <Box  border={1} borderColor="text.primary" {...borderProps} />                        
+                      <GridWithBeckground item container  direction="row"  justify="center"  alignItems="center">
+                        <Grid item container  direction="row"  justify="center" xs={12}>
+                          <Typography variant="h4" gutterBottom>
+                            Requests from users
+                          </Typography>
+                        </Grid> 
+                        {user && user.requests  ? Object.keys(user.requests).map(key =>{
+                          return(
+                              <Grid container key={key} justify="center" item xs={12}>                                
+                                <RequestTemplate handleResponse={this.handleResponse} adminMode={false} userRequsts={true} requestId={key} handleEdit={this.handleEditRequest} handleDelete={this.handleDeleteRequest} editMode={false} request = {user.requests[key]}/>
+                              </Grid>
+                            )})
+                          : 
+                            <Typography variant="h5" gutterBottom>
+                              You doesn't have any trip requests
+                            </Typography>  
                         }                     
                       </GridWithBeckground>  
-                    
-                    <Grid style={{ marginTop: "35px"}} item container  direction="row" justify="flex-end">
-                      {user && user.captain ? 
-                        <AddButtonBox >
-                          <Typography style={{ margin: "15px"}} variant="h5" >
-                            Add trip
-                          </Typography>
-                          <AddCircleIcon onClick={this.handleOnClickAddTrip}  fontSize="inherit" color="primary"/>
-                        </AddButtonBox>  
-                        : ""}                                            
-                    </Grid>      
-                    <Box  border={1} borderColor="text.primary" {...borderProps} />  
-                      
-                    <GridWithBeckground item container  direction="row"  justify="center"  alignItems="center">
-                      <Grid item container  direction="row"  justify="center" xs={12}>
-                        <Typography variant="h4" gutterBottom>
-                          Requests from users
-                        </Typography>
-                      </Grid> 
-                      {
-                         user && user.requests  ? Object.keys(user.requests).map(key =>{
-                          return(
-                            <Grid container key={key} justify="center" item xs={12}>
-                               {/*console.log("request",user.requests[key])*/}  
-                              <RequestTemplate handleResponse={this.handleResponse} adminMode={false} userRequsts={true} requestId={key} handleEdit={this.handleEditRequest} handleDelete={this.handleDeleteRequest} editMode={false} request = {user.requests[key]}/>
-                            </Grid>
-                          ) })
-                          : <Typography variant="h5" gutterBottom>
-                                You doesn't have any trip requests
-                              </Typography>  
-                      
-                      }                     
-                    </GridWithBeckground>  
                     </>
-                    : ""} 
-
-
-                    <Box  border={1} borderColor="text.primary" {...borderProps} />  
+                  : ""} 
+                  <Box  border={1} borderColor="text.primary" {...borderProps} />  
                     <GridWithBeckground item container  direction="row"  justify="center"  alignItems="center">
                       <Grid item container  direction="row"  justify="center" xs={12}>
                         <Typography variant="h4" gutterBottom>
-                           My requests
+                          My requests
                         </Typography>
                       </Grid> 
-                      {
-                         user && user.myRequests  ? Object.keys(user.myRequests).map(key =>{
-                          return(
-                            <Grid container key={key} justify="center" item xs={12}>
-                               {/*console.log("request",user.requests[key])  */}
-                              <RequestTemplate adminMode={false} userRequsts={false}  requestId={key} handleEdit={this.handleEditRequest} handleDelete={this.handleDeleteRequest} editMode={true} request = {user.myRequests[key]}/>
-                            </Grid>
+                      {user && user.myRequests  ? Object.keys(user.myRequests).map(key =>{
+                        return(
+                          <Grid container key={key} justify="center" item xs={12}>                                
+                            <RequestTemplate adminMode={false} userRequsts={false}  requestId={key} handleEdit={this.handleEditRequest} handleDelete={this.handleDeleteRequest} editMode={true} request = {user.myRequests[key]}/>
+                          </Grid>
                           ) })
-                          : <Typography variant="h5" gutterBottom>
-                              You doesn't have any trip requests
-                            </Typography>                          
+                        : <Typography variant="h5" gutterBottom>
+                            You doesn't have any trip requests
+                          </Typography>                          
                       }                     
                     </GridWithBeckground>  
                     <Box  border={1} borderColor="text.primary" {...borderProps} /> 
-                    {
-                       user && user.role === "admin"  ? 
-                            <GridWithBeckground item container  direction="row"  justify="center"  alignItems="center">
-                              <Grid item>
-                                <Typography variant="h4" gutterBottom>
-                                  Users requests
-                                </Typography>
-                              </Grid> 
-                              {user.usersRequests && Object.keys(user.usersRequests).map(key =>{
-                                return(
-                                    <Grid container key={key} justify="center" item xs={12}>
-                                      {/*console.log("request",user.usersRequests[key])*/}  
-                                        <RequestTemplate userRequsts={false} adminMode={true} editMode={false} request = {user.usersRequests[key]}/>                                       
-                                    </Grid> 
-                                )} )}                                               
-                            </GridWithBeckground>  
-                            :""
-                        }
-                         
-                          
-                           
-
-                        <Snackbar open={this.state.popUpAlert} autoHideDuration={3000} onClose={this.handleCloseAlert} >
-                            <MuiAlert elevation={6} variant="filled"  severity="success" onClose={this.handleCloseAlert}>
-                                {this.state.popUpAlertMessage}
-                              </MuiAlert>
-                        </Snackbar>
+                    {user && user.role === "admin"  ? 
+                      <GridWithBeckground item container  direction="row"  justify="center"  alignItems="center">
+                        <Grid item>
+                          <Typography variant="h4" gutterBottom>
+                            Users requests
+                          </Typography>
+                        </Grid> 
+                        {user.usersRequests && Object.keys(user.usersRequests).map(key =>{
+                          return(
+                            <Grid container key={key} justify="center" item xs={12}>
+                              <RequestTemplate userRequsts={false} adminData={true} adminMode={true} editMode={false} request = {user.usersRequests[key]}/>                                       
+                            </Grid> 
+                          )})
+                        }                                               
+                      </GridWithBeckground>  
+                        :""
+                    }
+                    <Snackbar open={this.state.popUpAlert} autoHideDuration={3000} onClose={this.handleCloseAlert} >
+                      <MuiAlert elevation={6} variant="filled"  severity="success" onClose={this.handleCloseAlert}>
+                        {this.state.popUpAlertMessage}
+                      </MuiAlert>
+                    </Snackbar>
                 </Grid>
                 
               }
@@ -458,10 +388,9 @@ class AccountPage extends Component {
                                                     onClose={this.handleCloseModal} 
                                                     onSubmit={this.handleSaveEditedRequest}/> : "" }   
 
-            </div>     
-          
-    );
-  }
+            </div>
+          );
+    }
   
 } 
  //coment1

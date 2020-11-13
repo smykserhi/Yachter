@@ -16,7 +16,7 @@ import { Box } from '@material-ui/core';
 import FormControl from '@material-ui/core/FormControl';
 import MenuItem from '@material-ui/core/MenuItem';
 
-const experianceArr = new Array()
+const experianceArr = []
   for(let i=1; i<11;i++) experianceArr.push(i)
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -33,11 +33,10 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.secondary.main,
   },
   form: {
-    width: '100%', // Fix IE 11 issue.
+    width: '100%', 
     marginTop: theme.spacing(3),
   },
-  formControl: {
-    //margin: theme.spacing(1),
+  formControl: {   
     width: "100%",
   },
   submit: {
@@ -54,10 +53,10 @@ const useStyles = makeStyles((theme) => ({
 export default function SignUpTemplate(props) {
   const classes = useStyles();
   const [experiance, setExperiance] = React.useState(1);
+
   const experianceOnChange = (e)=>{
     setExperiance(e.target.value)
-    props.onChange(e)
-    //console.log("Set expriance to ", e.target.value)
+    props.onChange(e)    
   }
   return (
     <Container component="main" maxWidth="xs">
@@ -103,8 +102,7 @@ export default function SignUpTemplate(props) {
                 fullWidth
                 name="passwordOne"
                 label="Password"
-                type="password"
-                //id="password"
+                type="password"                
                 autoComplete="current-password"
                 onChange={props.onChange}
               />
@@ -117,7 +115,6 @@ export default function SignUpTemplate(props) {
                 name="passwordTwo"
                 label="Password one more time"
                 type="password"
-                //id="password "
                 autoComplete="current-password"
                 onChange={props.onChange}
               />
@@ -130,7 +127,6 @@ export default function SignUpTemplate(props) {
                   id="experiance"
                   value={experiance}
                   name="experiance"
-                  //type="number"
                   onChange={experianceOnChange}
                   label="experiance"
                   >

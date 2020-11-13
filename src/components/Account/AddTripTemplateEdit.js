@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
@@ -13,8 +13,7 @@ import IconButton from '@material-ui/core/IconButton';
 import PhotoCamera from '@material-ui/icons/PhotoCamera';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
-import * as ROUTES from '../../constants/routes';
-import { withAuthorization } from '../Session';
+import {  withAuthorization } from '../Session';
 import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 import Alert from '@material-ui/lab/Alert';
 
@@ -41,53 +40,46 @@ const borderProps = {
     
   };
 const useStyles = makeStyles((theme) => ({
-    root: {
-        alignSelf: "center",   
-        margin: "5vh 0",
-        backgroundColor: theme.palette.background.paper,    
-        padding: "2vh 0",
-        borderRadius: "15px",
-        [theme.breakpoints.down('sm')]: {
-            width: "80%",
-        },
-        [theme.breakpoints.down('xs')]: {
-            width: "95%",
-        },
-        [theme.breakpoints.up('md')]: {
-            width: "60%",
-        } 
-    },
-    paper: {
-        padding: theme.spacing(2),
-        textAlign: 'center',
-        color: theme.palette.text.secondary,
-    },
-    top:{
-        width: "80%"
-    },
-    formControl: {
-        margin: theme.spacing(1),
-        width: "100%",
-    },
-    input: {
-        display: 'none',
-    },
-    addBytton:{
-        marginRight:"10px",      
-    },
-    addPhotoButton:{
-        [theme.breakpoints.up('sm')]: {
-            justifyContent : "flex-start"
-        },
-        [theme.breakpoints.down('sm')]: {
+  root: {
+    alignSelf: "center",    
+    margin: "5vh 0",
+    backgroundColor: theme.palette.background.paper,
+    width: "100%",
+    padding: "2vh 0",
+    borderRadius: "15px",    
+  },
+  paper: {
+    padding: theme.spacing(2),
+    textAlign: 'center',
+    color: theme.palette.text.secondary,
+  },
+  top:{
+      width: "80%"
+  },
+  formControl: {
+    margin: theme.spacing(1),
+    width: "100%",
+  },
+  input: {
+    display: 'none',
+  },
+  addBytton:{
+      marginRight:"10px",
+      
+  },
+  addPhotoButton:{
+    [theme.breakpoints.up('sm')]: {
+        justifyContent : "flex-start"
+      },
+    [theme.breakpoints.down('sm')]: {
         justifyContent : "flex-end"
       },
-    }
+  }
+
 }));
 
-const AddTripTemplate= (props)=> {
-    const userId = props.match.params.userId    
-    const dayDisTemplate = {dayDis: "", imgUrl: null }   
+const AddTripTemplate= (props)=> {        
+    const dayDisTemplate = {dayDis: "", imgUrl: null }    
     let tempArr=[]
     const classes = useStyles();
     const [shipName, setShipName] = React.useState("");
@@ -95,27 +87,36 @@ const AddTripTemplate= (props)=> {
     const [startDate, setStartDate] = React.useState("");
     const [endDate, setEndDate] = React.useState("");
     const [portDeparture, setPortDeparture] = React.useState("");
-    const [portOfArival, setPortOfArival] = React.useState();
-    const [tripDesacription, setTripDesacription] = React.useState();
-    const [title, setTitle] = React.useState();
-    const [fee, setFee] = React.useState("");
-    const [mainImgUrl, setMainImgUrl] = React.useState(null);  
+    const [portOfArival, setPortOfArival] = React.useState("");
+    const [tripDesacription, setTripDesacription] = React.useState("");
+    const [title, setTitle] = React.useState("");
+    const [fee, setFee] = React.useState(0);
+    const [mainImgUrl, setMainImgUrl] = React.useState(null);
+    const [progress, setProgress] = React.useState(0);
     const [daysDis, setDaysDis] = React.useState([dayDisTemplate]);
     const [yatchPhoto, setYatchPhoto] = React.useState([null]);
     const [message , setMessage] = React.useState(null)
-    const [progress, setProgress] = React.useState(0)   
-    //validator for daysDis arrey of objects
-    const dayDisValidator = ()=> {
-        let res
-        daysDis.map(el=>{
-            if(el.dayDis !== "" && el.imgUrl !== null) res = true
-            else res = false
-        })
-        return res
-   }
-   //Validation expration for form
-    const validation = shipName !== "" &&  startDate !== ""&& endDate !== "" && portDeparture !== "" && title !== "" && fee !== "" && mainImgUrl !== null && yatchPhoto[0] !== null && dayDisValidator()
+    const [setUp, setSetUp] = React.useState(true)
 
+    useEffect(() => {
+      //set up data
+        if(setUp){
+            const card= props.requestParam.card && props.requestParam.card        
+            setShipName(card.shipName)
+            setPassangers(card.passangers)
+            setStartDate(card.startDate)
+            setEndDate(card.endDate)
+            setPortDeparture(card.portDeparture)
+            setPortOfArival(card.portOfArival)
+            setTripDesacription(card.tripDesacription)
+            setTitle(card.title)
+            setFee(card.fee)
+            setMainImgUrl(card.imgUrl)
+            setDaysDis(card.daysDis)
+            setYatchPhoto(card.yatchPhoto)
+            setSetUp(false)
+        }
+    });
     //function recive image and function where save image url
     const saveImage=(img, func, arr=null, index=null)=>{
         const imgArr = [...img]
@@ -123,42 +124,43 @@ const AddTripTemplate= (props)=> {
             while(imgArr.length > tempArr.length){
                 tempArr.push("")
             }
-        }        
+        }
         imgArr.map((img, el)=>{    
             const upLoadTask = props.firebase.storage.ref(`images/${img.name}`).put(img)
             upLoadTask.on(
                 "state_changed",
                 snapshot =>{
-                    let prog = Math.round((snapshot.bytesTransferred/snapshot.totalBytes)*100)                  
-                    setProgress(prog)                  
+                    let progress = Math.round((snapshot.bytesTransferred/snapshot.totalBytes)*100)                  
+                    setProgress(progress)
                 },
                 error =>{
                     console.log(error)
-                },
-                () =>{
+                },() =>{
                     props.firebase.storage
-                        .ref("images")
-                        .child(img.name)
-                        .getDownloadURL()
-                        .then(url=>{                    
-                            if(arr !== null ){  // save in dayysDis object   {dayDis , imgUrl}                      
-                                if(index !== null){
+                    .ref("images")
+                    .child(img.name)
+                    .getDownloadURL()
+                    .then(url=>{                    
+                        if(arr !== null ){                        
+                            //arr it's dayDis arr and index tcken from input id     
+                            if(index !== null){
                                 arr[index].imgUrl= url  
                                 func([...arr])
                             }                                              
-                            else { //other imgUrl
-                                tempArr[el]= url                             
-                                func(tempArr)  
-                            }                        
-                        }else func(url) //if array and index did not passed to function
-                        })
-                
-                    }
+                            else {                            
+                                tempArr[el]= url                            
+                                func(tempArr)                  
+                            }
+                            
+                        }else func(url)
+                    })                
+                }
             )
         })
-    
-    } 
-    // save data to variable
+        
+    }
+
+    //save data from input to variable
     const onchangeHandler = (e)=>{    
         if(e.target.name === "Ship name") setShipName(e.target.value)
         else if(e.target.name === "Passgers") setPassangers(e.target.value)
@@ -168,23 +170,27 @@ const AddTripTemplate= (props)=> {
         else if(e.target.name === "Port of arival") setPortOfArival(e.target.value)
         else if(e.target.name === "Trip description") setTripDesacription(e.target.value)
         else if(e.target.name === "Title") setTitle(e.target.value)
-        else if(e.target.name === "Fee") setFee(e.target.value)    
+        else if(e.target.name === "Fee") setFee(e.target.value)
+    
     }
-    //save data to daysDis arrey of objects [{dayDis, imgUrl}]
+    //save data drom dayDis its arrey of objects
     const HandleOnchangeDayDis = (e,index) =>{      
         let tempDaysDis = daysDis
         tempDaysDis[index].dayDis = e.target.value
         setDaysDis([...tempDaysDis])
     }
-    //click add image icon
-    const handleAddImage =(e)=>{        
+    //image icon clicked, 
+    const handleAddImage =(e)=>{    // 
         if(e.target.name === "mainImage") saveImage(e.target.files, setMainImgUrl)
         else if(e.target.name === "yatchPhoto") saveImage(e.target.files, setYatchPhoto, yatchPhoto )
-        else { saveImage(e.target.files, setDaysDis, daysDis, e.target.name )    //save to daysDis arrey        
+        else { saveImage(e.target.files, setDaysDis, daysDis, e.target.name )        
         }
-    }
-    //save button
+    } 
+    //Update data in Firebase 
     const handleOnSave = ()=>{
+        const userId = props.requestParam.userId
+        const cardPostId = props.requestParam.cardPostId
+        const cardId = props.requestParam.cardId
         const response = {
             shipName,
             passangers,
@@ -197,32 +203,30 @@ const AddTripTemplate= (props)=> {
             fee,
             imgUrl: mainImgUrl,
             daysDis,
-            yatchPhoto
-        }    
-        const newResponse = {...response, userId}
-        const cardPostId = props.firebase.addCard(newResponse)
-        props.firebase.addCardToUser(userId, {...newResponse, cardPostId  })
+            yatchPhoto,
+            userId,
+            cardPostId
+        }
+        props.firebase.updateCard(cardPostId, userId, cardId,response )
         setMessage("success")
         setTimeout(() => {
-            props.history.push(ROUTES.ACCOUNT)     
-        }, 2000);
+            props.cancel()
+        }, 2000);    
     }
-    //add day button
-    const handleAddDay=(e)=>{
+    //click add day button
+    const handleAddDay=(e)=>{   
         let tempDaysDis = daysDis 
         tempDaysDis.push(dayDisTemplate)
         setDaysDis([...tempDaysDis])    
     }
-    //delete day button
+    //click delete day button
     const handleDeleteDay =(e)=>{
-        let tempDays= daysDis
-        tempDays.splice(e,1)  // delete element with e index      
+        let tempDays= daysDis        
         setDaysDis([...tempDays])
     }
-    //on close 
     const handleCancel=()=>{
-        props.history.push(ROUTES.ACCOUNT)  
-    }    
+        props.cancel()
+    }
     return (
         <div className={classes.root}>
             <Grid container direction="column"  justify="center"  alignItems="center" spacing={3}>
@@ -238,10 +242,9 @@ const AddTripTemplate= (props)=> {
                                 id="outlined-full-width1"
                                 label="Title"
                                 name="Title"
-                                required={true}
-                                style={{ margin: 8 }}
-                                defaultValue={title}
+                                style={{ margin: 8 }}                                
                                 fullWidth
+                                value={title&& title}                               
                                 onChange={onchangeHandler}
                                 InputLabelProps={{
                                     shrink: true,
@@ -255,9 +258,8 @@ const AddTripTemplate= (props)=> {
                                 name="Fee"
                                 type="number"
                                 style={{ margin: 8 }}
-                                required={true}
-                                defaultValue={fee}
-                                fullWidth
+                                value={fee&& fee}
+                                fullWidth                                
                                 onChange={onchangeHandler}
                                 InputLabelProps={{
                                     shrink: true,
@@ -269,9 +271,8 @@ const AddTripTemplate= (props)=> {
                                 id="outlined-full-width3"
                                 label="Ship name"
                                 name="Ship name"
-                                style={{ margin: 8 }}
-                                required={true}
-                                defaultValue={shipName}
+                                style={{ margin: 8 }}                                
+                                value={shipName&& shipName}
                                 fullWidth
                                 onChange={onchangeHandler}
                                 InputLabelProps={{
@@ -286,10 +287,9 @@ const AddTripTemplate= (props)=> {
                                     name="Passgers"
                                     labelId="demo-simple-select-outlined-label"
                                     id="demo-simple-select-outlined"
-                                    value={passangers}
+                                    value={passangers&& passangers}
                                     onChange={onchangeHandler}
-                                    label="Passgers"
-                                    required={true}
+                                    label="Passgers"                                    
                                     >
                                     <MenuItem value={1}>1 </MenuItem>
                                     <MenuItem value={2}>2</MenuItem>
@@ -305,15 +305,13 @@ const AddTripTemplate= (props)=> {
                                 name="Start date"
                                 style={{ margin: 8 }}
                                 fullWidth
-                                required={true}
-                                defaultValue={startDate}
+                                value={startDate&& startDate}
                                 onChange={onchangeHandler}
                                 type="date"
                                 InputLabelProps={{
                                     shrink: true,
                                 }}
-                                variant="outlined"/>
-                        
+                                variant="outlined"/>                        
                         </Grid>
                         <Grid item container  justify="center" md={6} xs={12}>
                             <TextField
@@ -322,8 +320,7 @@ const AddTripTemplate= (props)=> {
                                 name="End date"
                                 style={{ margin: 8 }}
                                 fullWidth
-                                required={true}
-                                defaultValue={endDate}
+                                value={endDate&& endDate}
                                 onChange={onchangeHandler}
                                 type="date"
                                 InputLabelProps={{
@@ -337,9 +334,8 @@ const AddTripTemplate= (props)=> {
                                 label="Port departure"
                                 name="Port departure"
                                 style={{ margin: 8 }}
-                                required={true}
                                 fullWidth
-                                defaultValue={portDeparture}
+                                value={portDeparture&& portDeparture}
                                 onChange={onchangeHandler}
                                 InputLabelProps={{
                                     shrink: true,
@@ -352,9 +348,8 @@ const AddTripTemplate= (props)=> {
                                 label="Port of arival"
                                 name="Port of arival"
                                 style={{ margin: 8 }}
-                                required={true}
                                 fullWidth
-                                defaultValue={portOfArival}
+                                value={portOfArival&& portOfArival}
                                 onChange={onchangeHandler}
                                 InputLabelProps={{
                                     shrink: true,
@@ -368,10 +363,9 @@ const AddTripTemplate= (props)=> {
                                 name= "Trip description"
                                 style={{ margin: 8 }}
                                 multiline={true}
-                                required={true}
                                 rows="2"
                                 fullWidth
-                                defaultValue={tripDesacription}
+                                value={tripDesacription&& tripDesacription}
                                 onChange={onchangeHandler}
                                 InputLabelProps={{
                                     shrink: true,
@@ -387,7 +381,8 @@ const AddTripTemplate= (props)=> {
                                 <IconButton color="primary" aria-label="upload picture" component="span">
                                     {mainImgUrl === null ? <PhotoCamera color="error" fontSize="large" /> : <PhotoCamera color="action" fontSize="large"/>} 
                                 </IconButton>
-                            </label>
+                            </label>   
+                                    
                         </Grid>
                     </Grid>
                     <Box  border={1} borderColor="text.primary" {...borderProps} />           
@@ -412,6 +407,7 @@ const AddTripTemplate= (props)=> {
                                     style={{ margin: 8 }}
                                     multiline={true}
                                     rows="1"
+                                    value={day.dayDis&& day.dayDis}
                                     fullWidth
                                     onChange={(e)=>HandleOnchangeDayDis(e,index)}
                                     InputLabelProps={{
@@ -433,10 +429,10 @@ const AddTripTemplate= (props)=> {
                                     <IconButton color="primary"   aria-label="upload picture" component="span">
                                             {index > 0 ? <HighlightOffIcon  color="action" fontSize="large" />  : ""} 
                                     </IconButton> 
-                                </label>
+                                </label>                               
                             </Grid>
-                        </Grid> 
-                    ))}
+                        </Grid>                             
+                    ))}                  
                     <Grid item container justify="flex-end" alignItems="center" md={11} xs={12}> 
                         <Grid className={classes.addBytton} item container  justify="flex-end" alignItems="center" xs={12} >
                             <Typography variant="subtitle1" gutterBottom>
@@ -447,7 +443,7 @@ const AddTripTemplate= (props)=> {
                             </IconButton>   
                         </Grid>                                            
                     </Grid> 
-                    <Box  border={1} borderColor="text.primary" {...borderProps} /> 
+                    <Box  border={1} borderColor="text.primary" {...borderProps} />                                    
                 </Grid>
                 <Grid item container  justify="flex-end" alignItems="center"  xs={11}>                                       
                     <input accept="image/*" className={classes.input} id={`icon-button-fil`} type="file" multiple name="yatchPhoto" onChange={handleAddImage}/>
@@ -460,23 +456,27 @@ const AddTripTemplate= (props)=> {
                         </IconButton>                        
                     </label>                          
                 </Grid>  
-                {message && message !== null ?  <Alert severity={message}>Trip saved successfully</Alert> : ""}                
-                <Grid container alignItems="center" justify="center" item xs={10} spacing={3}>
-                    <Grid item container justify="center" alignItems="center" xs={6} >
-                        <Button type="submit" disabled={!validation} fullWidth={true} onClick={handleOnSave} variant="contained" color="secondary">
-                            Save trip
-                        </Button>
-                    </Grid>
-                    <Grid item container justify="center" alignItems="center" xs={6} onClick={handleCancel}>
-                        <Button  fullWidth={true} variant="contained" color="secondary">
-                            Cancel
-                        </Button>
+                {message && message !== null ?  <Alert severity={message}>Trip saved successfully</Alert> : ""}
+                {progress>0 && progress<100 ? "" 
+                    : 
+                    <Grid container alignItems="center" justify="center" item xs={10} spacing={3}>
+                        <Grid item container justify="center" alignItems="center" xs={6} >
+                            <Button fullWidth={true} onClick={handleOnSave} variant="contained" color="secondary">
+                                Save trip
+                            </Button>
+                        </Grid>
+                        <Grid item container justify="center" alignItems="center" xs={6} onClick={handleCancel}>
+                            <Button  fullWidth={true} variant="contained" color="secondary">
+                                Cancel
+                            </Button>
+                        </Grid>        
+                        
                     </Grid> 
-                </Grid> 
+                }               
             </Grid>
             {progress>0 && progress<100 ? <BorderLinearProgress variant="determinate" value={progress} /> :""}
         </div>
-  );
+    );
 }
 
 const condition = authUser => authUser != null;
