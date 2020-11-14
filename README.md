@@ -2,7 +2,7 @@ This application can help captains who doesn't have crew and people who want yac
 <img src=".\src\Media\main.png">
 
 Sing in if you already have account
-<img src=".\src\Media\main.png">
+<img src=".\src\Media\Sing_in.png">
 
 Or sing up
 In registration you will have options: "User" and "Captain"

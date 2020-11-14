@@ -63,7 +63,10 @@ export default function EditProfile(props) {
   }
   //on submit create response and call props function
   const onSubmit =(e)=>{
-    const responce = {username, experiance, captain }   
+    let role 
+    if(captain) role = "captain"
+    else role = "user"
+    const responce = {username, experiance, captain ,role}   
     props.onSubmit(responce)
     e.preventDefault()
   }

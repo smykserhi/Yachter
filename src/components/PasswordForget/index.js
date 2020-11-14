@@ -30,7 +30,8 @@ class PasswordForgetFormBase extends Component {
       .doPasswordReset(email)
       .then(() => {
         this.setState({ ...INITIAL_STATE });
-        this.props.history.push(ROUTES.SIGN_IN);
+        this.props.firebase.doSignOut()
+        this.props.history.push(ROUTES.SIGN_IN);        
       })
       .catch(error => {
         this.setState({ error ,open: true});
