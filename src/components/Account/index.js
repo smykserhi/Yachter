@@ -16,6 +16,7 @@ import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 import IconButton from '@material-ui/core/IconButton';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
+import SendRoundedIcon from '@material-ui/icons/SendRounded';
 
 
 const borderProps = {
@@ -172,14 +173,26 @@ class AccountPage extends Component {
     this.setState({modalOpen: false, popUpAlert: true, popUpAlertMessage: "Request deleted"})
   }
   //Response to user modal open 
-  handleResponse=(data)=>{    
-    this.setState({modalOpen: true, modalContent: "Response", requestParam: data} )
+  handleResponse=(data)=>{     
+    this.setState({modalOpen: true, modalContent: "Response", requestParam: {...data, senderName : this.state.user.username, sendarMailId: this.state.userId } })
   }
   //send message to user after send button in modal
   handleResponseSend=(message)=>{
-    const sendTo = this.state.requestParam.senderUid       
-    this.props.firebase.addMessageToUser(sendTo, {...this.state.requestParam, message})
+    const sendTo = this.state.requestParam.senderUid   
+    let data = this.state.requestParam
+    data.senderName= this.state.user.username
+    data.senderUid = this.state.userId
+    //console.log("Request param",this.state.requestParam)    
+    this.props.firebase.addMessageToUser(sendTo, {...data, message})
     this.setState({modalOpen: false, modalContent: null, requestParam: null, popUpAlert: true, popUpAlertMessage: "Message sent"} )
+  }
+  handleSendMessageBeck=(data)=>{
+    // const sendTo = data.senderUid   
+    // data.senderName= this.state.user.username
+    // data.senderUid = this.state.userId
+    this.setState({modalOpen: true, modalContent: "Response", requestParam: data })
+
+    
   }
   //save new trip
   saveNewTrip = (res) =>{
@@ -248,19 +261,26 @@ class AccountPage extends Component {
                             <TextField
                               fullWidth={true}
                               id={key}
-                              label="Message "
-                              disabled={true}
-                              defaultValue={user.messages[key].message}
+                              label={`From ${user.messages[key].senderName}`} 
+                              //disabled={true}
+                              value={user.messages[key].message}
                               variant="outlined"
                               />
                           </Grid> 
-                          <Grid  item xs={2}>
+                          <Grid  item xs={1}>
                             <label onClick={()=>{this.handleDeleteMessage(key)}}>
                               <IconButton color="primary"   aria-label="upload picture" component="span">
                                 <HighlightOffIcon  color="error" fontSize="large" />   
                               </IconButton> 
                             </label>
                           </Grid> 
+                          <Grid  item xs={1}>
+                            <label onClick={()=>{this.handleSendMessageBeck(user.messages[key])}}>
+                              <IconButton color="primary"  component="span">
+                                <SendRoundedIcon  color="primary" fontSize="large" />   
+                              </IconButton> 
+                            </label>
+                          </Grid>
                         </Grid>
                               
                       ) })

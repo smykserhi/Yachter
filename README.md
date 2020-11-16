@@ -19,7 +19,7 @@ You can send request to existing trips.
 
 In Profile tab you can review your request and edit it.
 
-<img src=".\src\Media\user_profile.png">
+<img src=".\src\Media\user_profile_.png">
 
 Also you can edit your profile data, change password and reset password.
 
@@ -27,7 +27,7 @@ Also you can edit your profile data, change password and reset password.
 <img src=".\src\Media\Change_password.png">
 <img src=".\src\Media\Forgot+password.png">
 
-When captain will respond you, you will receive message. Read it you can in Profile tab
+When captain will respond you, you will receive message. Read and answer to it you can in Profile tab
 
 
 "Captain" You have the same features as regular users.
