@@ -1,3 +1,5 @@
+LIVE VERSION !!!!!   http://smykserhi.com/yachter/  !!!!!!!!
+
 This application can help captains who doesn't have crew and people who want yacht travel find each other.
 <img src=".\src\Media\main.png">
 
