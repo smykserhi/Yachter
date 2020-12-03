@@ -9,6 +9,8 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import {useHistory } from "react-router-dom";
+import * as ROUTES from '../../constants/routes';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -35,6 +37,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SignInTemplate(props) {
   const classes = useStyles();
+  const history = useHistory()
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
@@ -82,12 +85,12 @@ export default function SignInTemplate(props) {
           </Button>
           <Grid container>
             <Grid item xs>
-              <Link href="/pw-forget" variant="body2">
+              <Link onClick={()=> history.push(ROUTES.PASSWORD_FORGET)} variant="body2">
                 Forgot password?
               </Link>
             </Grid>
             <Grid item>
-              <Link href="/SignUp" variant="body2">
+              <Link onClick={()=> history.push(ROUTES.SIGN_UP)} variant="body2">
                 {"Don't have an account? Sign Up"}
               </Link>
             </Grid>

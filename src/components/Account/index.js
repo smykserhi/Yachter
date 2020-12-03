@@ -124,7 +124,7 @@ class AccountPage extends Component {
   handleDeleteConfirmed =()=>{    
     const data = this.state.requestParam
     this.props.firebase.deleteCardData(data.userId, data.cardId, data.cardPostId)
-    this.setState({modalOpen: false, modalContent: "", requestParam : null, popUpAlert: true, popUpAlert: "Trip deleted successfully"} ) 
+    this.setState({modalOpen: false, modalContent: "", requestParam : null, popUpAlert: true, popUpAlertMessage: "Trip deleted successfully"} ) 
   }
 
 
@@ -365,7 +365,7 @@ class AccountPage extends Component {
                     <Box  border={1} borderColor="text.primary" {...borderProps} /> 
                     {user && user.role === "admin"  ? 
                       <GridWithBeckground item container  direction="row"  justify="center"  alignItems="center">
-                        <Grid item>
+                        <Grid item >
                           <Typography variant="h4" gutterBottom>
                             Users requests
                           </Typography>

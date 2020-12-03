@@ -5,5 +5,5 @@ export const HOME = '/home';
 export const ACCOUNT = '/account';
 export const ADMIN = '/admin';
 export const PASSWORD_FORGET = '/pw-forget';
-export const TRIP_INFO = '/trip-info/:id';
+export const TRIP_INFO = '/trip-info';
 export const ADD_TRIP = '/add-trip';

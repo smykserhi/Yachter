@@ -41,7 +41,7 @@ const myTheme = createMuiTheme({
 const App = () => {
   const classes = useStyles();  
   return(
-    <Router >
+    <Router basename="/yachter">
       <ThemeProvider theme={myTheme}>       
             <Box className = {classes.mainGrid}>
               <Navigation  />  
@@ -51,7 +51,7 @@ const App = () => {
                 <Route path={ROUTES.SIGN_IN} render={()=>(<SignInPage />)} />
                 <Route path={ROUTES.PASSWORD_FORGET} component={PasswordForgetPage} />                
                 <Route path={ROUTES.ACCOUNT} render={()=>(<AccountPage />)}/>              
-                <Route path={ROUTES.TRIP_INFO} component={TripInfo}/>
+                <Route path={`${ROUTES.TRIP_INFO}/:id`} component={TripInfo}/>
                 <Route path={`${ROUTES.ADD_TRIP}/:userId`} component={AddTripTemplate}/>
                 <Route component={NotFound} />
               </RouterSwitch>                 

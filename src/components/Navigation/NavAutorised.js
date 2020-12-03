@@ -9,6 +9,7 @@ import Badge from '@material-ui/core/Badge';
 import MailIcon from '@material-ui/icons/Mail';
 import DirectionsBoatRoundedIcon from '@material-ui/icons/DirectionsBoatRounded';
 import * as ROUTES from '../../constants/routes';
+import {useHistory } from "react-router-dom";
 
 const useStyles = makeStyles({    
     navDisplayFlex: {
@@ -31,6 +32,7 @@ const useStyles = makeStyles({
   });
 
   const NavAutorised = (props) => {
+    const history = useHistory()
     const navLinks = props.links 
     const [user, setUser] = useState(null) 
     const [loading, setLoading] = useState(true)  
@@ -51,7 +53,7 @@ const useStyles = makeStyles({
     return (
       <AppBar position="static" color="secondary">
         <Toolbar >
-            <IconButton href={ROUTES.MAIN} edge="start" color="inherit" aria-label="home">
+            <IconButton onClick={()=> history.push(ROUTES.MAIN)} edge="start" color="inherit" aria-label="home">
                 <DirectionsBoatRoundedIcon fontSize="large" />
             </IconButton>            
             <List
@@ -61,20 +63,18 @@ const useStyles = makeStyles({
                 >
                 { user&& user.messages ?
                   <ListItem>                
-                    <IconButton href={ROUTES.ACCOUNT} edge="start" color="inherit" aria-label="home">
+                    <IconButton onClick={()=> history.push(ROUTES.ACCOUNT)}  edge="start" color="inherit" aria-label="home">
                       <Badge badgeContent={Object.keys(user.messages).length} color="error">
                         <MailIcon  />
                       </Badge>
                     </IconButton>               
                   </ListItem>                 
-                 :""}               
-                {navLinks.map(({ title, path }) => (
-                    <a href={path} key={title} className={classes.linkText}  >
-                      <ListItem button>                      
-                        {props.logInIcon ?<Box mx={2}> {props.logInIcon}</Box>  : ""}                                       
+                 :""}           {/* <a href={path} key={title} className={classes.linkText}  > */}     
+                {navLinks.map(({ title, path }) => (                   
+                      <ListItem className={classes.linkText} key={title} onClick={()=> history.push(path)}  button >                      
+                        {props.logInIcon ?<Box mx={2}  > {props.logInIcon}</Box>  : ""}                                       
                         <ListItemText primary={title} />
-                      </ListItem>
-                    </a>
+                      </ListItem>                    
                 ))}
             </List>           
             <div  className={classes.button}>                

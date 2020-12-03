@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useHystory} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 import Card from '@material-ui/core/Card';
@@ -18,6 +18,9 @@ import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
+import * as ROUTES from '../../constants/routes';
+import { Redirect,NavLink, useHistory }from "react-router-dom";
+
 
 const useStyles = makeStyles((theme) => ({
   root: {   
@@ -61,6 +64,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Trip(props) {
   const classes = useStyles();
+  const history = useHistory()
   const [expanded, setExpanded] = React.useState(false);
 const { userId, uid, title, startDate, daysDis, imgUrl, tripDesacription,endDate} = props.card
 //console.log(props.card)
@@ -125,16 +129,18 @@ const { userId, uid, title, startDate, daysDis, imgUrl, tripDesacription,endDate
             </Button> 
           </Grid> 
           : 
-          <Grid container   direction="row"  justify="space-between">
+          <Grid container   direction="row"  justify="space-between">          
             <Button
               variant="contained"
               color="secondary"
               className={classes.button}
               startIcon={<SendRoundedIcon />}
-              href={`/trip-info/${uid}`}
+              onClick={()=> history.push(`${ROUTES.TRIP_INFO}/${uid}`)}
+              //onClick={()=><Redirect to="/dvdv" />}
+              //href={`${ROUTES.TRIP_INFO}/${uid}`}
             >
                 Send request
-            </Button>        
+            </Button>              
             <IconButton
               className={clsx(classes.expand, {
                 [classes.expandOpen]: expanded,
